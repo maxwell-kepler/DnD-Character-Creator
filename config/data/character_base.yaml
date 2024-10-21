@@ -1,0 +1,44 @@
+# config/data/character_base.yaml
+abilities:
+    - strength
+    - dexterity
+    - constitution
+    - intelligence
+    - wisdom
+    - charisma
+
+sizes:
+    - Tiny
+    - Small
+    - Medium
+    - Large
+    - Huge
+    - Gargantuan
+
+base_stats:
+    default_ability_score: 10
+    max_level: 20
+    base_proficiency_bonus: 2
+    base_hit_points: 0
+    base_speed: 30
+    base_size: "Medium"
+
+skill_abilities:
+    Athletics: "strength"
+    Acrobatics: "dexterity"
+    Sleight of Hand: "dexterity"
+    Stealth: "dexterity"
+    Arcana: "intelligence"
+    History: "intelligence"
+    Investigation: "intelligence"
+    Nature: "intelligence"
+    Religion: "intelligence"
+    Animal Handling: "wisdom"
+    Insight: "wisdom"
+    Medicine: "wisdom"
+    Perception: "wisdom"
+    Survival: "wisdom"
+    Deception: "charisma"
+    Intimidation: "charisma"
+    Performance: "charisma"
+    Persuasion: "charisma"

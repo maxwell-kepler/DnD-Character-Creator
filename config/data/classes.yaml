@@ -1,0 +1,177 @@
+# config/data/classes.yaml
+fighter:
+    name: "Fighter"
+    hit_dice: "1d10"
+    primary_ability: ["Strength", "Dexterity"]
+    saving_throws: ["Strength", "Constitution"]
+    armor_proficiencies:
+        ["Light armor", "Medium armor", "Heavy armor", "Shields"]
+    weapon_proficiencies: ["Simple weapons", "Martial weapons"]
+    skill_choices:
+        count: 2
+        options:
+            - "Acrobatics"
+            - "Animal Handling"
+            - "Athletics"
+            - "History"
+            - "Insight"
+            - "Intimidation"
+            - "Perception"
+            - "Survival"
+    features:
+        level_1:
+            - name: "Fighting Style"
+              description: "You adopt a particular style of fighting as your specialty."
+              choices:
+                  - "Archery"
+                  - "Defense"
+                  - "Dueling"
+                  - "Great Weapon Fighting"
+                  - "Protection"
+                  - "Two-Weapon Fighting"
+            - name: "Second Wind"
+              description: "You have a limited well of stamina that you can draw on to protect yourself from harm."
+        level_2:
+            - name: "Action Surge"
+              description: "You can push yourself beyond your normal limits for a moment."
+        level_3:
+            - name: "Martial Archetype"
+              description: "You choose an archetype that you strive to emulate in your combat styles and techniques."
+              subclasses:
+                  champion:
+                      name: "Champion"
+                      features:
+                          - name: "Improved Critical"
+                            description: "Your weapon attacks score a critical hit on a roll of 19 or 20."
+                  eldritch_knight:
+                      name: "Eldritch Knight"
+                      features:
+                          - name: "Spellcasting"
+                            description: "You augment your martial prowess with the ability to cast spells."
+                          - name: "Weapon Bond"
+                            description: "You learn a ritual that creates a magical bond between yourself and one weapon."
+        level_4:
+            - name: "Ability Score Improvement"
+              description: "You can increase one ability score by 2, or two ability scores by 1."
+        level_5:
+            - name: "Extra Attack"
+              description: "You can attack twice, instead of once, whenever you take the Attack action on your turn."
+
+bard:
+    name: "Bard"
+    hit_dice: "1d8"
+    primary_ability: ["Charisma"]
+    saving_throws: ["Dexterity", "Charisma"]
+    armor_proficiencies: ["Light armor"]
+    weapon_proficiencies:
+        - "Simple weapons"
+        - "Hand crossbows"
+        - "Longswords"
+        - "Rapiers"
+        - "Shortswords"
+    skill_choices:
+        count: 3
+        options:
+            - "Acrobatics"
+            - "Animal Handling"
+            - "Arcana"
+            - "Athletics"
+            - "Deception"
+            - "History"
+            - "Insight"
+            - "Intimidation"
+            - "Investigation"
+            - "Medicine"
+            - "Nature"
+            - "Perception"
+            - "Performance"
+            - "Persuasion"
+            - "Religion"
+            - "Sleight of Hand"
+            - "Stealth"
+            - "Survival"
+    tool_proficiencies:
+        description: "Three musical instruments of your choice"
+        count: 3
+    features:
+        level_1:
+            - name: "Spellcasting"
+              description: "You have learned to untangle and reshape the fabric of reality in harmony with your wishes and music."
+            - name: "Bardic Inspiration"
+              description: "You can inspire others through stirring words or music."
+              dice: "1d6"
+        level_2:
+            - name: "Jack of All Trades"
+              description: "You can add half your proficiency bonus to any ability check you make that doesn't already include your proficiency bonus."
+            - name: "Song of Rest"
+              description: "You can use soothing music or oration to help revitalize your wounded allies during a short rest."
+              dice: "1d6"
+        level_3:
+            - name: "Bard College"
+              description: "You delve into the advanced techniques of a bard college of your choice."
+              subclasses:
+                  lore:
+                      name: "College of Lore"
+                      features:
+                          - name: "Bonus Proficiencies"
+                            description: "You gain proficiency in three skills of your choice."
+                          - name: "Cutting Words"
+                            description: "You learn how to use your wit to distract, confuse, and otherwise sap the confidence of others."
+                  valor:
+                      name: "College of Valor"
+                      features:
+                          - name: "Bonus Proficiencies"
+                            description: "You gain proficiency with medium armor, shields, and martial weapons."
+                          - name: "Combat Inspiration"
+                            description: "You learn to inspire others in battle."
+
+cleric:
+    name: "Cleric"
+    hit_dice: "1d8"
+    primary_ability: ["Wisdom"]
+    saving_throws: ["Wisdom", "Charisma"]
+    armor_proficiencies: ["Light armor", "Medium armor", "Shields"]
+    weapon_proficiencies: ["Simple weapons"]
+    skill_choices:
+        count: 2
+        options:
+            - "History"
+            - "Insight"
+            - "Medicine"
+            - "Persuasion"
+            - "Religion"
+    features:
+        level_1:
+            - name: "Spellcasting"
+              description: "As a conduit for divine power, you can cast cleric spells."
+            - name: "Divine Domain"
+              description: "Choose one domain related to your deity."
+              subclasses:
+                  life:
+                      name: "Life Domain"
+                      features:
+                          - name: "Bonus Proficiency"
+                            description: "You gain proficiency with heavy armor."
+                          - name: "Disciple of Life"
+                            description: "Your healing spells are more effective."
+                  light:
+                      name: "Light Domain"
+                      features:
+                          - name: "Bonus Cantrip"
+                            description: "You know the Light cantrip."
+                          - name: "Warding Flare"
+                            description: "You can interpose divine light between yourself and an attacking enemy."
+        level_2:
+            - name: "Channel Divinity"
+              description: "You gain the ability to channel divine energy directly from your deity."
+              uses: 1
+        level_3:
+            - name: "Divine Domain feature"
+              description: "You gain a feature specific to your Divine Domain."
+        level_4:
+            - name: "Ability Score Improvement"
+              description: "You can increase one ability score by 2, or two ability scores by 1."
+        level_5:
+            - name: "Destroy Undead"
+              description: "You can destroy certain undead creatures outright."
+              cr_threshold: 0.5
