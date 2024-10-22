@@ -51,6 +51,9 @@ class Character:
         self.skill_proficiencies = []
         self.saving_throw_proficiencies = []
         self.tool_proficiencies = []
+
+        # Equipment
+        self.equipment = []
     
     def calculate_skill_modifier(self, skill: str) -> int:
         """Calculate the modifier for a given skill"""
@@ -199,7 +202,8 @@ class Character:
             self._format_abilities(),
             self._format_skills(),
             self._format_features(),
-            self._format_proficiencies()
+            self._format_proficiencies(),
+            self._format_equipment() 
         ]
         
         return "\n\n".join(sections)
@@ -301,3 +305,10 @@ Languages: {', '.join(self.languages) if self.languages else 'None'}
 
 Proficiency Bonus: +{self.proficiency_bonus}
 """
+
+    def _format_equipment(self) -> str:
+        """Format equipment section"""
+        if not self.equipment:
+            return "\nEQUIPMENT\n─────────\nNone"
+            
+        return "\nEQUIPMENT\n─────────\n" + "\n".join(f"• {item}" for item in self.equipment)
