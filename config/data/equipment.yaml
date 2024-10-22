@@ -331,6 +331,27 @@ weapons:
             type: "ammunition"
             for_weapons: ["Sling"]
 
+# Properties reference
+weapon_properties:
+    ammunition:
+        description: "You need ammunition to make a ranged attack with this weapon."
+    finesse:
+        description: "When making an attack with a finesse weapon, you can use your choice of Strength or Dexterity modifier."
+    heavy:
+        description: "Small creatures have disadvantage on attack rolls with heavy weapons."
+    light:
+        description: "A light weapon is small and easy to handle, making it ideal for dual-wielding."
+    loading:
+        description: "Because of the time required to load this weapon, you can fire only one piece of ammunition when you use an action, bonus action, or reaction to fire it."
+    reach:
+        description: "This weapon adds 5 feet to your reach when you attack with it."
+    thrown:
+        description: "You can throw the weapon to make a ranged attack."
+    two_handed:
+        description: "This weapon requires two hands to use."
+    versatile:
+        description: "This weapon can be used with one or two hands."
+
 # Equipment Packs
 packs:
     dungeoneers_pack:
@@ -430,23 +451,32 @@ class_equipment:
                   - "shield"
                   - "holy_symbol"
 
-# Properties reference
-weapon_properties:
-    ammunition:
-        description: "You need ammunition to make a ranged attack with this weapon."
-    finesse:
-        description: "When making an attack with a finesse weapon, you can use your choice of Strength or Dexterity modifier."
-    heavy:
-        description: "Small creatures have disadvantage on attack rolls with heavy weapons."
-    light:
-        description: "A light weapon is small and easy to handle, making it ideal for dual-wielding."
-    loading:
-        description: "Because of the time required to load this weapon, you can fire only one piece of ammunition when you use an action, bonus action, or reaction to fire it."
-    reach:
-        description: "This weapon adds 5 feet to your reach when you attack with it."
-    thrown:
-        description: "You can throw the weapon to make a ranged attack."
-    two_handed:
-        description: "This weapon requires two hands to use."
-    versatile:
-        description: "This weapon can be used with one or two hands."
+instruments:
+    bagpipes:
+        name: "Bagpipes"
+        cost: "30 gp"
+        weight: 6
+    drum:
+        name: "Drum"
+        cost: "6 gp"
+        weight: 3
+    flute:
+        name: "Flute"
+        cost: "2 gp"
+        weight: 1
+    lute:
+        name: "Lute"
+        cost: "35 gp"
+        weight: 2
+    lyre:
+        name: "Lyre"
+        cost: "30 gp"
+        weight: 2
+    horn:
+        name: "Horn"
+        cost: "3 gp"
+        weight: 2
+    pan_flute:
+        name: "Pan flute"
+        cost: "12 gp"
+        weight: 2

@@ -224,6 +224,13 @@ class Character:
             if self._normalize_item_name(pack_data['name']) == normalized_name:
                 return pack_data
         
+        # Search Musical Instruments
+        if normalized_name in equipment['instruments']:
+            return equipment['instruments'][normalized_name]
+        for instrument_key, instrument_data in equipment['instruments'].items():
+            if self._normalize_item_name(instrument_data['name']) == normalized_name:
+                return instrument_data
+        
         return None
     
     def _parse_currency(self, cost_str: str) -> float:
