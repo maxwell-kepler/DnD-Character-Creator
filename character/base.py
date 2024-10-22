@@ -1,6 +1,23 @@
 # character/base.py
 from config.game_config import ConfigurationManager
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
+from dataclasses import dataclass
+
+@dataclass
+class InventoryItem:
+    name: str
+    weight: float
+    cost: float
+    quantity: int = 1
+    
+    @property
+    def total_weight(self) -> float:
+        return self.weight * self.quantity
+    
+    @property
+    def total_cost(self) -> float:
+        return self.cost * self.quantity
+
 
 class AbilityScores:
     def __init__(self):
@@ -52,8 +69,17 @@ class Character:
         self.saving_throw_proficiencies = []
         self.tool_proficiencies = []
 
-        # Equipment
-        self.equipment = []
+        # New equipment tracking
+        self.inventory: List[InventoryItem] = []
+        self.currency = {
+            'cp': 0,  # Copper pieces
+            'sp': 0,  # Silver pieces
+            'ep': 0,  # Electrum pieces
+            'gp': 0,  # Gold pieces
+            'pp': 0   # Platinum pieces
+        }
+
+
     
     def calculate_skill_modifier(self, skill: str) -> int:
         """Calculate the modifier for a given skill"""
@@ -115,6 +141,171 @@ class Character:
         
         # Update skills after applying all racial bonuses
         self.update_all_skills()
+
+
+    def add_item(self, name: str, quantity: int = 1) -> None:
+        """Add an item to the character's inventory with improved error handling"""
+        if not self.config.equipment:
+            raise ValueError("Equipment configuration not loaded")
+        
+        # Handle ammunition quantities
+        base_name = name
+        explicit_quantity = None
+        if base_name.endswith(')'): 
+            try:
+                base_name, count = name.rsplit('(', 1)
+                base_name = base_name.strip()
+                explicit_quantity = int(count.rstrip(')').strip())
+            except ValueError:
+                pass  # If parsing fails, use the original name
+        
+        # Search through all equipment categories
+        item_data = self._find_item_in_config(base_name)
+        if not item_data:
+            raise ValueError(f"Item not found: {base_name}")
+        
+        # Use explicit quantity if provided (e.g., "arrows (20)")
+        final_quantity = explicit_quantity if explicit_quantity is not None else quantity
+        
+        # Convert cost string to value
+        cost_str = item_data.get('cost', '0 gp')
+        cost_value = self._parse_currency(cost_str)
+        
+        # Create and add inventory item
+        item = InventoryItem(
+            name=item_data['name'],
+            weight=float(item_data.get('weight', 0)),
+            cost=cost_value,
+            quantity=final_quantity
+        )
+        
+        # Check for existing item and combine quantities if found
+        for existing_item in self.inventory:
+            if existing_item.name == item.name:
+                existing_item.quantity += final_quantity
+                print(f"Added {final_quantity} to existing {item.name} (total: {existing_item.quantity})")
+                return
+        
+        self.inventory.append(item)
+        print(f"Added {item.name}" + (f" (×{final_quantity})" if final_quantity > 1 else ""))
+    
+    
+    def _normalize_item_name(self, name: str) -> str:
+        """Normalize item name for comparison (e.g., 'Chain Mail' -> 'chain_mail')"""
+        return name.lower().replace(' ', '_')
+
+    def _find_item_in_config(self, name: str) -> Optional[Dict]:
+        """Search for an item in all equipment categories with improved name matching"""
+        equipment = self.config.equipment
+        normalized_name = self._normalize_item_name(name)
+        
+        # Search armor
+        for category in equipment['armor'].values():
+            # Try direct lookup first
+            if normalized_name in category:
+                return category[normalized_name]
+            # Try matching by normalized display name
+            for item_key, item_data in category.items():
+                if self._normalize_item_name(item_data['name']) == normalized_name:
+                    return item_data
+        
+        # Search weapons
+        for category in equipment['weapons'].values():
+            if normalized_name in category:
+                return category[normalized_name]
+            for item_key, item_data in category.items():
+                if self._normalize_item_name(item_data['name']) == normalized_name:
+                    return item_data
+        
+        # Search packs
+        if normalized_name in equipment['packs']:
+            return equipment['packs'][normalized_name]
+        for pack_key, pack_data in equipment['packs'].items():
+            if self._normalize_item_name(pack_data['name']) == normalized_name:
+                return pack_data
+        
+        return None
+    
+    def _parse_currency(self, cost_str: str) -> float:
+        """Convert a currency string (e.g., '50 gp') to gold piece value"""
+        if not cost_str:
+            return 0.0
+            
+        amount, currency = cost_str.split()
+        amount = float(amount)
+        
+        # Convert to gold pieces
+        conversion = {
+            'cp': 0.01,
+            'sp': 0.1,
+            'ep': 0.5,
+            'gp': 1.0,
+            'pp': 10.0
+        }
+        
+        return amount * conversion[currency.lower()]
+    
+    def get_carry_capacity(self) -> float:
+        """Calculate the character's maximum carry capacity"""
+        strength_score = self.ability_scores.strength
+        # Base carrying capacity is strength score × 15
+        capacity = strength_score * 15
+        
+        # Apply size modifiers
+        size_multipliers = {
+            'Tiny': 0.5,
+            'Small': 1.0,
+            'Medium': 1.0,
+            'Large': 2.0,
+            'Huge': 4.0,
+            'Gargantuan': 8.0
+        }
+        
+        return capacity * size_multipliers[self.size]
+    
+    def get_total_weight(self) -> float:
+        """Calculate total weight of all carried items"""
+        return sum(item.total_weight for item in self.inventory)
+    
+    def get_total_value(self) -> Dict[str, float]:
+        """Calculate total value of all equipment in various currencies"""
+        total_gp = sum(item.total_cost for item in self.inventory)
+        
+        # Add currency pouch contents
+        total_gp += (
+            self.currency['cp'] * 0.01 +
+            self.currency['sp'] * 0.1 +
+            self.currency['ep'] * 0.5 +
+            self.currency['gp'] +
+            self.currency['pp'] * 10
+        )
+        
+        # Convert to different denominations
+        return {
+            'pp': int(total_gp / 10),
+            'gp': int(total_gp % 10),
+            'sp': int((total_gp * 10) % 10),
+            'cp': int((total_gp * 100) % 10)
+        }
+    
+    def get_encumbrance_level(self) -> Tuple[str, float]:
+        """Get the character's encumbrance level and movement penalty"""
+        strength_score = self.ability_scores.strength
+        total_weight = self.get_total_weight()
+        
+        # Encumbrance thresholds
+        normal_max = strength_score * 5
+        heavy_max = strength_score * 10
+        capacity_max = self.get_carry_capacity()
+        
+        if total_weight > capacity_max:
+            return "Overencumbered", 0  # Cannot move
+        elif total_weight > heavy_max:
+            return "Heavily Encumbered", 20  # Speed reduced by 20 feet
+        elif total_weight > normal_max:
+            return "Encumbered", 10  # Speed reduced by 10 feet
+        else:
+            return "Normal", 0  # No penalty
     
     def set_class(self, class_name: str) -> None:
         """Set character class and apply class features"""
@@ -307,8 +498,51 @@ Proficiency Bonus: +{self.proficiency_bonus}
 """
 
     def _format_equipment(self) -> str:
-        """Format equipment section"""
-        if not self.equipment:
+        """Format equipment section with weights and values"""
+        if not self.inventory:
             return "\nEQUIPMENT\n─────────\nNone"
-            
-        return "\nEQUIPMENT\n─────────\n" + "\n".join(f"• {item}" for item in self.equipment)
+        
+        total_weight = self.get_total_weight()
+        carry_capacity = self.get_carry_capacity()
+        encumbrance_level, speed_penalty = self.get_encumbrance_level()
+        total_value = self.get_total_value()
+        
+        # Format currency string
+        currency_str = []
+        for denomination, amount in total_value.items():
+            if amount > 0:
+                currency_str.append(f"{amount} {denomination}")
+        
+        lines = [
+            "\nEQUIPMENT",
+            "─────────"
+        ]
+        
+        # List all items with their individual weights
+        for item in sorted(self.inventory, key=lambda x: x.name):
+            quantity_str = f" (×{item.quantity})" if item.quantity > 1 else ""
+            lines.append(f"• {item.name}{quantity_str} - {item.total_weight} lbs")
+        
+        # Add summary section
+        lines.extend([
+            "\nSUMMARY",
+            "────────",
+            f"Total Weight: {total_weight:.1f} / {carry_capacity:.1f} lbs",
+            f"Encumbrance Level: {encumbrance_level}",
+            f"Speed Penalty: {speed_penalty} ft" if speed_penalty else "Speed Penalty: None",
+            f"Total Value: {', '.join(currency_str)}"
+        ])
+        
+        # Add currency pouch contents if any exists
+        if any(self.currency.values()):
+            lines.extend([
+                "\nCURRENCY POUCH",
+                "──────────────",
+                f"PP: {self.currency['pp']}",
+                f"GP: {self.currency['gp']}",
+                f"EP: {self.currency['ep']}",
+                f"SP: {self.currency['sp']}",
+                f"CP: {self.currency['cp']}"
+            ])
+        
+        return "\n".join(lines)

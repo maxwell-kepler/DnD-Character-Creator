@@ -30,7 +30,8 @@ class CharacterCreator:
         choice = int(input("Enter your choice (number): "))
         class_choice = class_choices[choice - 1]
         character.set_class(class_choice)
-
+        
+        # Choose equipment
         self._choose_equipment(character)
         
         # Choose skills based on class options
@@ -41,71 +42,6 @@ class CharacterCreator:
             self._choose_subclass(character)
         
         return character
-
-    def _choose_equipment(self, character: Character) -> None:
-        """Handle equipment selection based on character class"""
-        if not character.class_name or character.class_name not in self.config.equipment['class_equipment']:
-            return
-            
-        equipment_options = self.config.equipment['class_equipment'][character.class_name]
-        character.equipment = []
-        
-        print("\nChoose your starting equipment:")
-        
-        # Process each option set
-        for i, option_set in enumerate(equipment_options['option_sets'], 1):
-            # Handle fixed equipment first
-            if 'fixed' in option_set:
-                character.equipment.extend(option_set['fixed'])
-                continue
-                
-            # Handle choice-based equipment
-            if 'choices' in option_set:
-                print(f"\nOption Set {i}:")
-                for j, choice in enumerate(option_set['choices'], 1):
-                    if isinstance(choice, list):
-                        print(f"{j}. {', '.join(choice)}")
-                    else:
-                        print(f"{j}. {choice}")
-                
-                while True:
-                    try:
-                        choice_idx = int(input("Enter your choice (number): ")) - 1
-                        if 0 <= choice_idx < len(option_set['choices']):
-                            chosen_items = option_set['choices'][choice_idx]
-                            if isinstance(chosen_items, list):
-                                character.equipment.extend(chosen_items)
-                            else:
-                                character.equipment.append(chosen_items)
-                            break
-                        else:
-                            print("Invalid choice. Please try again.")
-                    except ValueError:
-                        print("Please enter a valid number.")
-        
-        # Special handling for class-specific items
-        if character.class_name == "bard":
-            print("\nChoose three musical instruments:")
-            available_instruments = ["Lute", "Flute", "Drum", "Horn", "Viol", "Bagpipes"]
-            for i in range(3):
-                print(f"\nInstrument {i+1}:")
-                for j, instrument in enumerate(available_instruments, 1):
-                    print(f"{j}. {instrument}")
-                
-                while True:
-                    try:
-                        choice = int(input("Enter your choice (number): ")) - 1
-                        if 0 <= choice < len(available_instruments):
-                            character.equipment.append(available_instruments[choice])
-                            break
-                        else:
-                            print("Invalid choice. Please try again.")
-                    except ValueError:
-                        print("Please enter a valid number.")
-        
-        print("\nSelected Equipment:")
-        for item in character.equipment:
-            print(f"• {item}")
 
     def _choose_race_and_subrace(self, character: Character) -> None:
         """Handle race and subrace selection"""
@@ -161,7 +97,7 @@ class CharacterCreator:
         choice = int(input("Enter your choice (1-3): "))
         
         if choice == 1:
-            scores = self._standard_array()
+            scores = [15, 14, 13, 12, 10, 8]
         elif choice == 2:
             scores = self._roll_abilities()
         else:
@@ -169,12 +105,9 @@ class CharacterCreator:
             
         self._assign_ability_scores(character, scores)
     
-    def _standard_array(self) -> List[int]:
-        """Return the standard array of ability scores"""
-        return [15, 14, 13, 12, 10, 8]
-    
     def _roll_abilities(self) -> List[int]:
         """Roll 4d6, drop lowest for each ability score"""
+        import random
         scores = []
         for _ in range(6):
             rolls = sorted([random.randint(1, 6) for _ in range(4)])
@@ -221,10 +154,8 @@ class CharacterCreator:
         
         print("\nAssign your scores:", scores)
         for score in scores:
-            # Get remaining abilities
             remaining_abilities = [a for a in abilities if a not in assignments]
             
-            # Display available abilities with indices
             print(f"\nAssign {score} to which ability?")
             for i, ability in enumerate(remaining_abilities, 1):
                 print(f"{i}. {ability}")
@@ -243,22 +174,6 @@ class CharacterCreator:
         
         character.set_ability_scores(assignments)
     
-    def _choose_subclass(self, character: Character) -> None:
-        """Handle subclass selection"""
-        if not character.class_data or 'subclasses' not in character.class_data['features']['level_3']:
-            return
-            
-        subclasses = character.class_data['features']['level_3']['subclasses']
-        print("\nChoose your subclass:")
-        subclass_names = list(subclasses.keys())
-        
-        for i, subclass in enumerate(subclass_names, 1):
-            print(f"{i}. {subclasses[subclass]['name']}")
-            
-        choice = int(input("Enter your choice (number): "))
-        subclass_choice = subclass_names[choice - 1]
-        character.set_subclass(subclass_choice)
-    
     def _choose_skills(self, character: Character) -> None:
         """Handle skill selection for the character"""
         if not character.class_data:
@@ -270,21 +185,184 @@ class CharacterCreator:
         
         print(f"\nChoose {num_choices} skills:")
         for _ in range(num_choices):
-            # Display available skills
             print("\nChoose a skill:")
             for i, skill in enumerate(available_skills, 1):
                 print(f"{i}. {skill}")
             
-            # Get choice
             choice = int(input("Enter your choice (number): "))
             chosen_skill = available_skills.pop(choice - 1)
             character.skill_proficiencies.append(chosen_skill)
         
-        # Update skill modifiers after all selections
         character.update_all_skills()
     
     def _get_input(self, prompt: str) -> str:
         return input(prompt).strip()
+
+    def _choose_equipment(self, character: Character) -> None:
+        """Handle equipment selection based on character class"""
+        if not character.class_name or character.class_name not in self.config.equipment['class_equipment']:
+            return
+            
+        equipment_options = self.config.equipment['class_equipment'][character.class_name]
+        
+        print("\nChoose your starting equipment:")
+        
+        # Process each option set
+        for i, option_set in enumerate(equipment_options['option_sets'], 1):
+            # Handle fixed equipment first
+            if 'fixed' in option_set:
+                for item in option_set['fixed']:
+                    try:
+                        character.add_item(item)
+                        print(f"Added: {item}")
+                    except ValueError as e:
+                        print(f"Warning: Couldn't add {item} - {e}")
+                continue
+                
+            # Handle choice-based equipment
+            if 'choices' in option_set:
+                print(f"\nOption Set {i}:")
+                for j, choice in enumerate(option_set['choices'], 1):
+                    if isinstance(choice, list):
+                        print(f"{j}. {', '.join(choice)}")
+                    else:
+                        print(f"{j}. {choice}")
+                
+                while True:
+                    try:
+                        choice_idx = int(input("Enter your choice (number): ")) - 1
+                        if 0 <= choice_idx < len(option_set['choices']):
+                            chosen_items = option_set['choices'][choice_idx]
+                            if isinstance(chosen_items, list):
+                                for item in chosen_items:
+                                    self._handle_equipment_choice(character, item)
+                            else:
+                                self._handle_equipment_choice(character, chosen_items)
+                            break
+                        else:
+                            print("Invalid choice. Please try again.")
+                    except ValueError as e:
+                        print(f"Error: {e}")
+                        print("Please enter a valid number.")
+
+    def _handle_equipment_choice(self, character: Character, item: str) -> None:
+        """Handle a single equipment choice, including category-based choices"""
+        # Define special choices that need category handling
+        special_choices = {
+            "martial_melee_weapon": ("martial_melee", "Choose a martial melee weapon:"),
+            "martial_ranged_weapon": ("martial_ranged", "Choose a martial ranged weapon:"),
+            "simple_melee_weapon": ("simple_melee", "Choose a simple melee weapon:"),
+            "simple_ranged_weapon": ("simple_ranged", "Choose a simple ranged weapon:"),
+            "two_martial_weapons": ("martial_combined", "Choose two martial weapons (can be the same):"),
+            "other_musical_instrument": ("instruments", "Choose a musical instrument:")
+        }
+        
+        # Special handling for category-based choices
+        if item in special_choices:
+            category, prompt = special_choices[item]
+            if category == "martial_combined":
+                self._choose_two_martial_weapons(character)
+            elif category == "instruments":
+                self._choose_musical_instrument(character)
+            else:
+                self._choose_from_weapon_category(character, category, prompt)
+        else:
+            # Direct item addition
+            try:
+                character.add_item(item)
+            except ValueError as e:
+                print(f"Warning: {e}")
+
+    def _get_weapons_from_category(self, category: str) -> List[str]:
+        """Get list of weapons from a specific category"""
+        weapons = []
+        if category in self.config.equipment['weapons']:
+            for weapon_data in self.config.equipment['weapons'][category].values():
+                weapons.append(weapon_data['name'])
+        return sorted(weapons)
+
+    def _choose_from_weapon_category(self, character: Character, category: str, prompt: str) -> None:
+        """Handle choosing a weapon from a specific category"""
+        weapons = self._get_weapons_from_category(category)
+        if not weapons:
+            print(f"No weapons available in category: {category}")
+            return
+        
+        print(f"\n{prompt}")
+        for i, weapon in enumerate(weapons, 1):
+            print(f"{i}. {weapon}")
+        
+        while True:
+            try:
+                choice = int(input("Enter your choice (number): ")) - 1
+                if 0 <= choice < len(weapons):
+                    character.add_item(weapons[choice])
+                    break
+                else:
+                    print(f"Please enter a number between 1 and {len(weapons)}")
+            except ValueError:
+                print("Please enter a valid number")
+
+    def _choose_two_martial_weapons(self, character: Character) -> None:
+        """Handle the special case of choosing two martial weapons"""
+        # Combine both martial melee and ranged weapons
+        melee_weapons = self._get_weapons_from_category("martial_melee")
+        ranged_weapons = self._get_weapons_from_category("martial_ranged")
+        all_weapons = sorted(melee_weapons + ranged_weapons)
+        
+        print("\nChoose your first martial weapon:")
+        for i, weapon in enumerate(all_weapons, 1):
+            print(f"{i}. {weapon}")
+        
+        # First weapon choice
+        while True:
+            try:
+                choice1 = int(input("Enter your first choice (number): ")) - 1
+                if 0 <= choice1 < len(all_weapons):
+                    character.add_item(all_weapons[choice1])
+                    break
+                else:
+                    print(f"Please enter a number between 1 and {len(all_weapons)}")
+            except ValueError:
+                print("Please enter a valid number")
+        
+        # Second weapon choice (can be the same as the first)
+        print("\nChoose your second martial weapon (can be the same as the first):")
+        for i, weapon in enumerate(all_weapons, 1):
+            print(f"{i}. {weapon}")
+        
+        while True:
+            try:
+                choice2 = int(input("Enter your second choice (number): ")) - 1
+                if 0 <= choice2 < len(all_weapons):
+                    character.add_item(all_weapons[choice2])
+                    break
+                else:
+                    print(f"Please enter a number between 1 and {len(all_weapons)}")
+            except ValueError:
+                print("Please enter a valid number")
+
+    def _choose_musical_instrument(self, character: Character) -> None:
+        """Handle musical instrument selection"""
+        instruments = [
+            "Bagpipes", "Drum", "Dulcimer", "Flute", "Lute", 
+            "Lyre", "Horn", "Pan Flute", "Shawm", "Viol"
+        ]
+        
+        print("\nChoose a musical instrument:")
+        for i, instrument in enumerate(instruments, 1):
+            print(f"{i}. {instrument}")
+        
+        while True:
+            try:
+                choice = int(input("Enter your choice (number): ")) - 1
+                if 0 <= choice < len(instruments):
+                    character.add_item(instruments[choice])
+                    break
+                else:
+                    print(f"Please enter a number between 1 and {len(instruments)}")
+            except ValueError:
+                print("Please enter a valid number")
 
 def main():
     creator = CharacterCreator()

@@ -3,23 +3,23 @@
 # Armor Categories
 armor:
     light:
-        padded:
-            name: "Padded"
+        padded_armor:
+            name: "Padded Armor"
             cost: "5 gp"
             weight: 8
             armor_class:
                 base: 11
                 dex_bonus: true
             stealth_disadvantage: true
-        leather:
-            name: "Leather"
+        leather_armor:
+            name: "Leather Armor"
             cost: "10 gp"
             weight: 10
             armor_class:
                 base: 11
                 dex_bonus: true
-        studded_leather:
-            name: "Studded Leather"
+        studded_leather_armor:
+            name: "Studded Leather Armor"
             cost: "45 gp"
             weight: 13
             armor_class:
@@ -27,8 +27,8 @@ armor:
                 dex_bonus: true
 
     medium:
-        hide:
-            name: "Hide"
+        hide_armor:
+            name: "Hide Armor"
             cost: "10 gp"
             weight: 12
             armor_class:
@@ -43,8 +43,24 @@ armor:
                 base: 13
                 dex_bonus: true
                 max_bonus: 2
+        scale_mail:
+            name: "Scale Mail"
+            cost: "50 gp"
+            weight: 45
+            armor_class:
+                base: 14
+                dex_bonus: true
+                max_bonus: 2
+            stealth_disadvantage: true
 
     heavy:
+        ring_mail:
+            name: "Ring Mail"
+            cost: "30 gp"
+            weight: 40
+            armor_class:
+                base: 14
+            stealth_disadvantage: true
         chain_mail:
             name: "Chain Mail"
             cost: "75 gp"
@@ -53,6 +69,31 @@ armor:
                 base: 16
             strength_requirement: 13
             stealth_disadvantage: true
+        splint_armor:
+            name: "Splint Armor"
+            cost: "200 gp"
+            weight: 60
+            armor_class:
+                base: 17
+            strength_requirement: 15
+            stealth_disadvantage: true
+        plate_armor:
+            name: "Plate Armor"
+            cost: "1500 gp"
+            weight: 65
+            armor_class:
+                base: 18
+            strength_requirement: 15
+            stealth_disadvantage: true
+
+    shields:
+        shield:
+            name: "Shield"
+            cost: "10 gp"
+            weight: 6
+            armor_class:
+                bonus: 2
+            properties: ["One-handed"]
 
 # Weapons
 weapons:
@@ -72,6 +113,59 @@ weapons:
             weight: 1
             properties: ["Finesse", "Light", "Thrown"]
             range: "20/60"
+        great_club:
+            name: "Great Club"
+            cost: "2 sp"
+            damage: "1d8"
+            damage_type: "bludgeoning"
+            weight: 10
+            properties: ["Two-handed"]
+        hand_axe:
+            name: "Hand Axe"
+            cost: "5 gp"
+            damage: "1d6"
+            damage_type: "slashing"
+            weight: 2
+            properties: ["Light", "Thrown"]
+            range: "20/60"
+        javelin:
+            name: "Javelin"
+            cost: "5 sp"
+            damage: "1d6"
+            damage_type: "piercing"
+            weight: 2
+            properties: ["Thrown"]
+            range: "30/120"
+        light_hammer:
+            name: "Light Hammer"
+            cost: "2 gp"
+            damage: "1d4"
+            damage_type: "bludgeoning"
+            weight: 2
+            properties: ["Light", "Thrown"]
+            range: "20/60"
+        mace:
+            name: "Mace"
+            cost: "5 gp"
+            damage: "1d6"
+            damage_type: "bludgeoning"
+            weight: 4
+            properties: []
+        quarterstaff:
+            name: "Quarterstaff"
+            cost: "2 sp"
+            damage: "1d6"
+            damage_type: "bludgeoning"
+            weight: 4
+            properties: ["Versatile"]
+            versatile_damage: "1d8"
+        sickle:
+            name: "Sickle"
+            cost: "1 gp"
+            damage: "1d4"
+            damage_type: "slashing"
+            weight: 2
+            properties: ["Light"]
         spear:
             name: "Spear"
             cost: "1 gp"
@@ -82,6 +176,81 @@ weapons:
             range: "20/60"
             versatile_damage: "1d8"
 
+    martial_melee:
+        battle_axe:
+            name: "Battle Axe"
+            cost: "10 gp"
+            damage: "1d8"
+            damage_type: "slashing"
+            weight: 4
+            properties: ["Versatile"]
+            versatile_damage: "1d10"
+        flail:
+            name: "Flail"
+            cost: "10 gp"
+            damage: "1d8"
+            damage_type: "bludgeoning"
+            weight: 2
+            properties: []
+        glaive:
+            name: "Glaive"
+            cost: "20 gp"
+            damage: "1d10"
+            damage_type: "slashing"
+            weight: 6
+            properties: ["Heavy", "Reach", "Two-handed"]
+        great_axe:
+            name: "Great Axe"
+            cost: "30 gp"
+            damage: "1d12"
+            damage_type: "slashing"
+            weight: 7
+            properties: ["Heavy", "Two-handed"]
+        great_sword:
+            name: "Great Sword"
+            cost: "50 gp"
+            damage: "2d6"
+            damage_type: "slashing"
+            weight: 6
+            properties: ["Heavy", "Two-handed"]
+        long_sword:
+            name: "Long Sword"
+            cost: "15 gp"
+            damage: "1d8"
+            damage_type: "slashing"
+            weight: 3
+            properties: ["Versatile"]
+            versatile_damage: "1d10"
+        maul:
+            name: "Maul"
+            cost: "10 gp"
+            damage: "2d6"
+            damage_type: "bludgeoning"
+            weight: 10
+            properties: ["Heavy", "Two-handed"]
+        morning_star:
+            name: "Morning Star"
+            cost: "15 gp"
+            damage: "1d8"
+            damage_type: "piercing"
+            weight: 4
+            properties: []
+        rapier:
+            name: "Rapier"
+            cost: "25 gp"
+            damage: "1d8"
+            damage_type: "piercing"
+            weight: 2
+            properties: ["Finesse"]
+        war_hammer:
+            name: "War Hammer"
+            cost: "15 gp"
+            damage: "1d8"
+            damage_type: "bludgeoning"
+            weight: 2
+            properties: ["Versatile"]
+            versatile_damage: "1d10"
+
     simple_ranged:
         light_crossbow:
             name: "Light Crossbow"
@@ -91,6 +260,14 @@ weapons:
             weight: 5
             properties: ["Ammunition", "Loading", "Two-handed"]
             range: "80/320"
+        dart:
+            name: "Dart"
+            cost: "5 cp"
+            damage: "1d4"
+            damage_type: "piercing"
+            weight: 0.25
+            properties: ["Finesse", "Thrown"]
+            range: "20/60"
         shortbow:
             name: "Shortbow"
             cost: "25 gp"
@@ -99,23 +276,14 @@ weapons:
             weight: 2
             properties: ["Ammunition", "Two-handed"]
             range: "80/320"
-
-    martial_melee:
-        longsword:
-            name: "Longsword"
-            cost: "15 gp"
-            damage: "1d8"
-            damage_type: "slashing"
-            weight: 3
-            properties: ["Versatile"]
-            versatile_damage: "1d10"
-        rapier:
-            name: "Rapier"
-            cost: "25 gp"
-            damage: "1d8"
-            damage_type: "piercing"
-            weight: 2
-            properties: ["Finesse"]
+        sling:
+            name: "Sling"
+            cost: "1 sp"
+            damage: "1d4"
+            damage_type: "bludgeoning"
+            weight: 0
+            properties: ["Ammunition"]
+            range: "30/120"
 
     martial_ranged:
         longbow:
@@ -126,12 +294,49 @@ weapons:
             weight: 2
             properties: ["Ammunition", "Heavy", "Two-handed"]
             range: "150/600"
+        heavy_crossbow:
+            name: "Heavy Crossbow"
+            cost: "50 gp"
+            damage: "1d10"
+            damage_type: "piercing"
+            weight: 18
+            properties: ["Ammunition", "Heavy", "Loading", "Two-handed"]
+            range: "100/400"
+        hand_crossbow:
+            name: "Hand Crossbow"
+            cost: "75 gp"
+            damage: "1d6"
+            damage_type: "piercing"
+            weight: 3
+            properties: ["Ammunition", "Light", "Loading"]
+            range: "30/120"
+
+    ammunition:
+        arrows:
+            name: "Arrows (20)"
+            cost: "1 gp"
+            weight: 1
+            type: "ammunition"
+            for_weapons: ["Shortbow", "Longbow"]
+        crossbow_bolts:
+            name: "Crossbow Bolts (20)"
+            cost: "1 gp"
+            weight: 1.5
+            type: "ammunition"
+            for_weapons: ["Hand Crossbow", "Light Crossbow", "Heavy Crossbow"]
+        sling_bullets:
+            name: "Sling Bullets (20)"
+            cost: "4 cp"
+            weight: 1.5
+            type: "ammunition"
+            for_weapons: ["Sling"]
 
 # Equipment Packs
 packs:
-    dungeoneers:
+    dungeoneers_pack:
         name: "Dungeoneer's Pack"
         cost: "12 gp"
+        weight: 25.5
         contents:
             - "Backpack"
             - "Crowbar"
@@ -143,9 +348,10 @@ packs:
             - "Waterskin"
             - "50 feet of hempen rope"
 
-    explorers:
+    explorers_pack:
         name: "Explorer's Pack"
         cost: "10 gp"
+        weight: 24
         contents:
             - "Backpack"
             - "Bedroll"
@@ -156,9 +362,10 @@ packs:
             - "Waterskin"
             - "50 feet of hempen rope"
 
-    priests:
+    priests_pack:
         name: "Priest's Pack"
         cost: "19 gp"
+        weight: 24
         contents:
             - "Backpack"
             - "Blanket"
@@ -176,49 +383,70 @@ class_equipment:
     fighter:
         option_sets:
             - choices:
-                  - ["Chain mail"]
-                  - ["Leather armor", "Longbow", "20 arrows"]
+                  - ["chain_mail"]
+                  - ["leather_armor", "longbow", "arrows"]
             - choices:
-                  - ["Martial weapon", "Shield"]
-                  - ["Two martial weapons"]
+                  - ["martial_melee_weapon", "shield"] # Changed from martial_weapon
+                  - ["two_martial_weapons"] # This is a special choice that will be handled in code
             - choices:
-                  - ["Light crossbow", "20 bolts"]
-                  - ["Two handaxes"]
+                  - ["light_crossbow", "crossbow_bolts"]
+                  - ["hand_axe", "hand_axe"] # Explicitly list two hand axes
             - choices:
-                  - ["Dungeoneer's Pack"]
-                  - ["Explorer's Pack"]
+                  - ["dungeoneers_pack"]
+                  - ["explorers_pack"]
 
     bard:
         option_sets:
             - choices:
-                  - ["Rapier"]
-                  - ["Longsword"]
-                  - ["Simple weapon"]
+                  - ["rapier"]
+                  - ["long_sword"]
+                  - ["simple_melee_weapon"] # Changed from simple_weapon
             - choices:
-                  - ["Diplomat's Pack"]
-                  - ["Entertainer's Pack"]
+                  - ["diplomats_pack"]
+                  - ["entertainers_pack"]
             - choices:
-                  - ["Lute"]
-                  - ["Other musical instrument"]
+                  - ["lute"]
+                  - ["other_musical_instrument"]
             - fixed:
-                  - "Leather armor"
-                  - "Dagger"
+                  - "leather_armor"
+                  - "dagger"
 
     cleric:
         option_sets:
             - choices:
-                  - ["Mace"]
-                  - ["Warhammer"] # if proficient
+                  - ["mace"]
+                  - ["war_hammer"]
             - choices:
-                  - ["Scale mail"]
-                  - ["Leather armor"]
-                  - ["Chain mail"] # if proficient
+                  - ["scale_mail"]
+                  - ["leather_armor"]
+                  - ["chain_mail"]
             - choices:
-                  - ["Light crossbow", "20 bolts"]
-                  - ["Simple weapon"]
+                  - ["light_crossbow", "crossbow_bolts"]
+                  - ["simple_melee_weapon"] # Changed from simple_weapon
             - choices:
-                  - ["Priest's Pack"]
-                  - ["Explorer's Pack"]
+                  - ["priests_pack"]
+                  - ["explorers_pack"]
             - fixed:
-                  - "Shield"
-                  - "Holy symbol"
+                  - "shield"
+                  - "holy_symbol"
+
+# Properties reference
+weapon_properties:
+    ammunition:
+        description: "You need ammunition to make a ranged attack with this weapon."
+    finesse:
+        description: "When making an attack with a finesse weapon, you can use your choice of Strength or Dexterity modifier."
+    heavy:
+        description: "Small creatures have disadvantage on attack rolls with heavy weapons."
+    light:
+        description: "A light weapon is small and easy to handle, making it ideal for dual-wielding."
+    loading:
+        description: "Because of the time required to load this weapon, you can fire only one piece of ammunition when you use an action, bonus action, or reaction to fire it."
+    reach:
+        description: "This weapon adds 5 feet to your reach when you attack with it."
+    thrown:
+        description: "You can throw the weapon to make a ranged attack."
+    two_handed:
+        description: "This weapon requires two hands to use."
+    versatile:
+        description: "This weapon can be used with one or two hands."
