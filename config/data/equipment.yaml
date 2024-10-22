@@ -1,387 +1,936 @@
 # config/data/equipment.yaml
 
-# Armor Categories
-armor:
-    light:
-        padded_armor:
-            name: "Padded Armor"
-            cost: "5 gp"
-            weight: 8
-            armor_class:
-                base: 11
-                dex_bonus: true
-            stealth_disadvantage: true
-        leather_armor:
-            name: "Leather Armor"
-            cost: "10 gp"
-            weight: 10
-            armor_class:
-                base: 11
-                dex_bonus: true
-        studded_leather_armor:
-            name: "Studded Leather Armor"
-            cost: "45 gp"
-            weight: 13
-            armor_class:
-                base: 12
-                dex_bonus: true
+# Equipment type definitions
+equipment_types:
+    ammunition: "Standard ammunition for ranged weapons"
+    armor: "Protective gear that improves AC"
+    artisan_tool: "Tools used for crafting and trades"
+    container: "Items that can hold other items"
+    gaming_set: "Sets used for various games"
+    gear: "General adventuring equipment"
+    holy_symbol: "Religious symbols used as spellcasting focus"
+    instrument: "Musical instruments used for performance"
+    mount: "Creatures used for transportation"
+    trade_good: "Items primarily used for commerce"
+    vehicle: "Non-living means of transportation"
+    weapon: "Weapons used for combat"
 
-    medium:
-        hide_armor:
-            name: "Hide Armor"
-            cost: "10 gp"
-            weight: 12
-            armor_class:
-                base: 12
-                dex_bonus: true
-                max_bonus: 2
-        chain_shirt:
-            name: "Chain Shirt"
-            cost: "50 gp"
-            weight: 20
-            armor_class:
-                base: 13
-                dex_bonus: true
-                max_bonus: 2
-        scale_mail:
-            name: "Scale Mail"
-            cost: "50 gp"
-            weight: 45
-            armor_class:
-                base: 14
-                dex_bonus: true
-                max_bonus: 2
-            stealth_disadvantage: true
-
-    heavy:
-        ring_mail:
-            name: "Ring Mail"
-            cost: "30 gp"
-            weight: 40
-            armor_class:
-                base: 14
-            stealth_disadvantage: true
-        chain_mail:
-            name: "Chain Mail"
-            cost: "75 gp"
-            weight: 55
-            armor_class:
-                base: 16
-            strength_requirement: 13
-            stealth_disadvantage: true
-        splint_armor:
-            name: "Splint Armor"
-            cost: "200 gp"
-            weight: 60
-            armor_class:
-                base: 17
-            strength_requirement: 15
-            stealth_disadvantage: true
-        plate_armor:
-            name: "Plate Armor"
-            cost: "1500 gp"
-            weight: 65
-            armor_class:
-                base: 18
-            strength_requirement: 15
-            stealth_disadvantage: true
-
-    shields:
-        shield:
-            name: "Shield"
-            cost: "10 gp"
-            weight: 6
-            armor_class:
-                bonus: 2
-            properties: ["One-handed"]
-
-# Weapons
-weapons:
-    simple_melee:
-        club:
-            name: "Club"
-            cost: "1 sp"
-            damage: "1d4"
-            damage_type: "bludgeoning"
-            weight: 2
-            properties: ["Light"]
-        dagger:
-            name: "Dagger"
-            cost: "2 gp"
-            damage: "1d4"
-            damage_type: "piercing"
-            weight: 1
-            properties: ["Finesse", "Light", "Thrown"]
-            range: "20/60"
-        great_club:
-            name: "Great Club"
-            cost: "2 sp"
-            damage: "1d8"
-            damage_type: "bludgeoning"
-            weight: 10
-            properties: ["Two-handed"]
-        hand_axe:
-            name: "Hand Axe"
-            cost: "5 gp"
-            damage: "1d6"
-            damage_type: "slashing"
-            weight: 2
-            properties: ["Light", "Thrown"]
-            range: "20/60"
-        javelin:
-            name: "Javelin"
-            cost: "5 sp"
-            damage: "1d6"
-            damage_type: "piercing"
-            weight: 2
-            properties: ["Thrown"]
-            range: "30/120"
-        light_hammer:
-            name: "Light Hammer"
-            cost: "2 gp"
-            damage: "1d4"
-            damage_type: "bludgeoning"
-            weight: 2
-            properties: ["Light", "Thrown"]
-            range: "20/60"
-        mace:
-            name: "Mace"
-            cost: "5 gp"
-            damage: "1d6"
-            damage_type: "bludgeoning"
-            weight: 4
-            properties: []
-        quarterstaff:
-            name: "Quarterstaff"
-            cost: "2 sp"
-            damage: "1d6"
-            damage_type: "bludgeoning"
-            weight: 4
-            properties: ["Versatile"]
-            versatile_damage: "1d8"
-        sickle:
-            name: "Sickle"
-            cost: "1 gp"
-            damage: "1d4"
-            damage_type: "slashing"
-            weight: 2
-            properties: ["Light"]
-        spear:
-            name: "Spear"
-            cost: "1 gp"
-            damage: "1d6"
-            damage_type: "piercing"
-            weight: 3
-            properties: ["Thrown", "Versatile"]
-            range: "20/60"
-            versatile_damage: "1d8"
-
-    martial_melee:
-        battle_axe:
-            name: "Battle Axe"
-            cost: "10 gp"
-            damage: "1d8"
-            damage_type: "slashing"
-            weight: 4
-            properties: ["Versatile"]
-            versatile_damage: "1d10"
-        flail:
-            name: "Flail"
-            cost: "10 gp"
-            damage: "1d8"
-            damage_type: "bludgeoning"
-            weight: 2
-            properties: []
-        glaive:
-            name: "Glaive"
-            cost: "20 gp"
-            damage: "1d10"
-            damage_type: "slashing"
-            weight: 6
-            properties: ["Heavy", "Reach", "Two-handed"]
-        great_axe:
-            name: "Great Axe"
-            cost: "30 gp"
-            damage: "1d12"
-            damage_type: "slashing"
-            weight: 7
-            properties: ["Heavy", "Two-handed"]
-        great_sword:
-            name: "Great Sword"
-            cost: "50 gp"
-            damage: "2d6"
-            damage_type: "slashing"
-            weight: 6
-            properties: ["Heavy", "Two-handed"]
-        long_sword:
-            name: "Long Sword"
-            cost: "15 gp"
-            damage: "1d8"
-            damage_type: "slashing"
-            weight: 3
-            properties: ["Versatile"]
-            versatile_damage: "1d10"
-        maul:
-            name: "Maul"
-            cost: "10 gp"
-            damage: "2d6"
-            damage_type: "bludgeoning"
-            weight: 10
-            properties: ["Heavy", "Two-handed"]
-        morning_star:
-            name: "Morning Star"
-            cost: "15 gp"
-            damage: "1d8"
-            damage_type: "piercing"
-            weight: 4
-            properties: []
-        rapier:
-            name: "Rapier"
-            cost: "25 gp"
-            damage: "1d8"
-            damage_type: "piercing"
-            weight: 2
-            properties: ["Finesse"]
-        war_hammer:
-            name: "War Hammer"
-            cost: "15 gp"
-            damage: "1d8"
-            damage_type: "bludgeoning"
-            weight: 2
-            properties: ["Versatile"]
-            versatile_damage: "1d10"
-
-    simple_ranged:
-        light_crossbow:
-            name: "Light Crossbow"
-            cost: "25 gp"
-            damage: "1d8"
-            damage_type: "piercing"
-            weight: 5
-            properties: ["Ammunition", "Loading", "Two-handed"]
-            range: "80/320"
-        dart:
-            name: "Dart"
-            cost: "5 cp"
-            damage: "1d4"
-            damage_type: "piercing"
-            weight: 0.25
-            properties: ["Finesse", "Thrown"]
-            range: "20/60"
-        shortbow:
-            name: "Shortbow"
-            cost: "25 gp"
-            damage: "1d6"
-            damage_type: "piercing"
-            weight: 2
-            properties: ["Ammunition", "Two-handed"]
-            range: "80/320"
-        sling:
-            name: "Sling"
-            cost: "1 sp"
-            damage: "1d4"
-            damage_type: "bludgeoning"
-            weight: 0
-            properties: ["Ammunition"]
-            range: "30/120"
-
-    martial_ranged:
-        longbow:
-            name: "Longbow"
-            cost: "50 gp"
-            damage: "1d8"
-            damage_type: "piercing"
-            weight: 2
-            properties: ["Ammunition", "Heavy", "Two-handed"]
-            range: "150/600"
-        heavy_crossbow:
-            name: "Heavy Crossbow"
-            cost: "50 gp"
-            damage: "1d10"
-            damage_type: "piercing"
-            weight: 18
-            properties: ["Ammunition", "Heavy", "Loading", "Two-handed"]
-            range: "100/400"
-        hand_crossbow:
-            name: "Hand Crossbow"
-            cost: "75 gp"
-            damage: "1d6"
-            damage_type: "piercing"
-            weight: 3
-            properties: ["Ammunition", "Light", "Loading"]
-            range: "30/120"
-
+# Main equipment categories
+equipment:
     ammunition:
         arrows:
-            name: "Arrows (20)"
+            name: "Arrows"
+            type: "ammunition"
             cost: "1 gp"
             weight: 1
-            type: "ammunition"
-            for_weapons: ["Shortbow", "Longbow"]
+            unit:
+                amount: 20
+                measure: "arrows"
+            for_weapons: ["Longbow", "Shortbow"]
+            description: "Standard arrows for bows."
         crossbow_bolts:
-            name: "Crossbow Bolts (20)"
+            name: "Crossbow Bolts"
+            type: "ammunition"
             cost: "1 gp"
             weight: 1.5
-            type: "ammunition"
-            for_weapons: ["Hand Crossbow", "Light Crossbow", "Heavy Crossbow"]
+            unit:
+                amount: 20
+                measure: "bolts"
+            for_weapons: ["Hand Crossbow", "Heavy Crossbow", "Light Crossbow"]
+            description: "Standard bolts for crossbows."
         sling_bullets:
-            name: "Sling Bullets (20)"
+            name: "Sling Bullets"
+            type: "ammunition"
             cost: "4 cp"
             weight: 1.5
-            type: "ammunition"
+            unit:
+                amount: 20
+                measure: "bullets"
             for_weapons: ["Sling"]
+            description: "Standard ammunition for slings."
 
-# Properties reference
-weapon_properties:
-    ammunition:
-        description: "You need ammunition to make a ranged attack with this weapon."
-    finesse:
-        description: "When making an attack with a finesse weapon, you can use your choice of Strength or Dexterity modifier."
-    heavy:
-        description: "Small creatures have disadvantage on attack rolls with heavy weapons."
-    light:
-        description: "A light weapon is small and easy to handle, making it ideal for dual-wielding."
-    loading:
-        description: "Because of the time required to load this weapon, you can fire only one piece of ammunition when you use an action, bonus action, or reaction to fire it."
-    reach:
-        description: "This weapon adds 5 feet to your reach when you attack with it."
-    thrown:
-        description: "You can throw the weapon to make a ranged attack."
-    two_handed:
-        description: "This weapon requires two hands to use."
-    versatile:
-        description: "This weapon can be used with one or two hands."
+    armor:
+        heavy:
+            chain_mail:
+                name: "Chain Mail"
+                type: "armor"
+                subtype: "heavy"
+                cost: "75 gp"
+                weight: 55
+                armor_class:
+                    base: 16
+                strength_requirement: 13
+                stealth_disadvantage: true
+                description: "Made of interlocking metal rings."
+            plate_armor:
+                name: "Plate Armor"
+                type: "armor"
+                subtype: "heavy"
+                cost: "1500 gp"
+                weight: 65
+                armor_class:
+                    base: 18
+                strength_requirement: 15
+                stealth_disadvantage: true
+                description: "The best armor a warrior can buy."
+            ring_mail:
+                name: "Ring Mail"
+                type: "armor"
+                subtype: "heavy"
+                cost: "30 gp"
+                weight: 40
+                armor_class:
+                    base: 14
+                stealth_disadvantage: true
+                description: "Leather armor with metal rings sewn into it."
+            splint_armor:
+                name: "Splint Armor"
+                type: "armor"
+                subtype: "heavy"
+                cost: "200 gp"
+                weight: 60
+                armor_class:
+                    base: 17
+                strength_requirement: 15
+                stealth_disadvantage: true
+                description: "Made of vertical strips of metal."
+        light:
+            leather_armor:
+                name: "Leather Armor"
+                type: "armor"
+                subtype: "light"
+                cost: "10 gp"
+                weight: 10
+                armor_class:
+                    base: 11
+                    dex_bonus: true
+                description: "Basic armor made of hardened leather."
+            padded_armor:
+                name: "Padded Armor"
+                type: "armor"
+                subtype: "light"
+                cost: "5 gp"
+                weight: 8
+                armor_class:
+                    base: 11
+                    dex_bonus: true
+                stealth_disadvantage: true
+                description: "Quilted layers of cloth and batting."
+            studded_leather_armor:
+                name: "Studded Leather Armor"
+                type: "armor"
+                subtype: "light"
+                cost: "45 gp"
+                weight: 13
+                armor_class:
+                    base: 12
+                    dex_bonus: true
+                description: "Leather armor reinforced with metal studs."
+        medium:
+            chain_shirt:
+                name: "Chain Shirt"
+                type: "armor"
+                subtype: "medium"
+                cost: "50 gp"
+                weight: 20
+                armor_class:
+                    base: 13
+                    dex_bonus: true
+                    max_bonus: 2
+                description: "A shirt of chain mail armor."
+            hide_armor:
+                name: "Hide Armor"
+                type: "armor"
+                subtype: "medium"
+                cost: "10 gp"
+                weight: 12
+                armor_class:
+                    base: 12
+                    dex_bonus: true
+                    max_bonus: 2
+                description: "Thick furs and pelts."
+            scale_mail:
+                name: "Scale Mail"
+                type: "armor"
+                subtype: "medium"
+                cost: "50 gp"
+                weight: 45
+                armor_class:
+                    base: 14
+                    dex_bonus: true
+                    max_bonus: 2
+                stealth_disadvantage: true
+                description: "Coat of leather covered with overlapping pieces of metal."
+        shields:
+            shield:
+                name: "Shield"
+                type: "armor"
+                subtype: "shield"
+                cost: "10 gp"
+                weight: 6
+                armor_class:
+                    bonus: 2
+                properties: ["One-handed"]
+                description: "A wooden or metal shield."
 
-# Starting Equipment Options by Class
+    artisan_tools:
+        brewers_supplies:
+            name: "Brewer's Supplies"
+            type: "artisan_tool"
+            cost: "20 gp"
+            weight: 9
+            description: "Tools for brewing ale and beer."
+        calligraphers_supplies:
+            name: "Calligrapher's Supplies"
+            type: "artisan_tool"
+            cost: "10 gp"
+            weight: 5
+            description: "Tools for creating decorative writing."
+        carpenters_tools:
+            name: "Carpenter's Tools"
+            type: "artisan_tool"
+            cost: "8 gp"
+            weight: 6
+            description: "Tools for woodworking."
+        cartographers_tools:
+            name: "Cartographer's Tools"
+            type: "artisan_tool"
+            cost: "15 gp"
+            weight: 6
+            description: "Tools for making maps."
+        cobblers_tools:
+            name: "Cobbler's Tools"
+            type: "artisan_tool"
+            cost: "5 gp"
+            weight: 5
+            description: "Tools for making and repairing shoes."
+        cooks_utensils:
+            name: "Cook's Utensils"
+            type: "artisan_tool"
+            cost: "1 gp"
+            weight: 8
+            description: "Tools for cooking meals."
+        jewelers_tools:
+            name: "Jeweler's Tools"
+            type: "artisan_tool"
+            cost: "25 gp"
+            weight: 2
+            description: "Tools for working with precious stones and metals."
+        leatherworkers_tools:
+            name: "Leatherworker's Tools"
+            type: "artisan_tool"
+            cost: "5 gp"
+            weight: 5
+            description: "Tools for working with leather."
+        masons_tools:
+            name: "Mason's Tools"
+            type: "artisan_tool"
+            cost: "10 gp"
+            weight: 8
+            description: "Tools for working with stone."
+        painters_supplies:
+            name: "Painter's Supplies"
+            type: "artisan_tool"
+            cost: "10 gp"
+            weight: 5
+            description: "Tools for creating artwork."
+        smiths_tools:
+            name: "Smith's Tools"
+            type: "artisan_tool"
+            cost: "20 gp"
+            weight: 8
+            description: "Tools for working with metal."
+        tinkers_tools:
+            name: "Tinker's Tools"
+            type: "artisan_tool"
+            cost: "50 gp"
+            weight: 10
+            description: "Tools for repairing mechanical objects."
+        weavers_tools:
+            name: "Weaver's Tools"
+            type: "artisan_tool"
+            cost: "1 gp"
+            weight: 5
+            description: "Tools for producing cloth."
+        woodcarvers_tools:
+            name: "Woodcarver's Tools"
+            type: "artisan_tool"
+            cost: "1 gp"
+            weight: 5
+            description: "Tools for carving wooden objects."
+    containers:
+        backpack:
+            name: "Backpack"
+            type: "container"
+            cost: "2 gp"
+            weight: 5
+            capacity: 30
+            description: "A leather pack for carrying gear."
+        barrel:
+            name: "Barrel"
+            type: "container"
+            cost: "2 gp"
+            weight: 70
+            capacity: 40
+            description: "A large container that can hold up to 40 gallons."
+        bottle:
+            name: "Glass Bottle"
+            type: "container"
+            cost: "2 gp"
+            weight: 2
+            capacity: 1.5
+            description: "A glass bottle that holds 1.5 pints of liquid."
+        chest:
+            name: "Chest"
+            type: "container"
+            cost: "5 gp"
+            weight: 25
+            capacity: 300
+            description: "A sturdy chest that can hold up to 12 cubic feet of gear."
+        component_pouch:
+            name: "Component Pouch"
+            type: "container"
+            cost: "25 gp"
+            weight: 2
+            description: "A small watertight leather belt pouch that has compartments for storing spell components and other magical items."
+        map_case:
+            name: "Map or Scroll Case"
+            type: "container"
+            cost: "1 gp"
+            weight: 1
+            description: "A sturdy tube for storing maps and scrolls."
+        pouch:
+            name: "Belt Pouch"
+            type: "container"
+            cost: "5 sp"
+            weight: 1
+            capacity: 6
+            description: "A small pouch that can hold 1/5 cubic foot of gear."
+        quiver:
+            name: "Quiver"
+            type: "container"
+            cost: "1 gp"
+            weight: 1
+            capacity: 20
+            description: "A leather quiver that can hold up to 20 arrows."
+        waterskin:
+            name: "Waterskin"
+            type: "container"
+            cost: "2 sp"
+            weight: 5
+            capacity: 4
+            description: "A leather container that holds 4 pints of liquid."
+    gaming_sets:
+        dice_set:
+            name: "Dice Set"
+            type: "gaming_set"
+            cost: "1 sp"
+            weight: 0
+            description: "A set of gaming dice including one or more d6s."
+        dragonchess_set:
+            name: "Dragonchess Set"
+            type: "gaming_set"
+            cost: "1 gp"
+            weight: 0.5
+            description: "A three-dimensional chess game with dragon-themed pieces."
+        playing_card_set:
+            name: "Playing Card Set"
+            type: "gaming_set"
+            cost: "5 sp"
+            weight: 0
+            description: "A deck of playing cards."
+        three_dragon_ante_set:
+            name: "Three-Dragon Ante Set"
+            type: "gaming_set"
+            cost: "1 gp"
+            weight: 0
+            description: "A popular card game featuring dragon cards."
+
+    gear:
+        alms_box:
+            name: "Alms Box"
+            type: "gear"
+            cost: "5 sp"
+            weight: 1
+            description: "A small box for collecting donations."
+        ball_bearings:
+            name: "Ball Bearings"
+            type: "gear"
+            cost: "1 gp"
+            weight: 2
+            unit:
+                amount: 1000
+                measure: "bearings"
+            description: "As an action, you can spill these tiny metal balls to cover a 10-foot-square area."
+        bedroll:
+            name: "Bedroll"
+            type: "gear"
+            cost: "1 gp"
+            weight: 7
+            description: "A portable sleeping roll for resting outdoors."
+        bell:
+            name: "Bell"
+            type: "gear"
+            cost: "1 gp"
+            weight: 0
+            description: "A small bell that can be used for signaling."
+        blanket:
+            name: "Blanket"
+            type: "gear"
+            cost: "5 sp"
+            weight: 3
+            description: "A warm blanket for cold nights."
+        block_of_incense:
+            name: "Block of Incense"
+            type: "gear"
+            cost: "1 gp"
+            weight: 0
+            description: "A block of fragrant incense for religious ceremonies."
+        book:
+            name: "Book"
+            type: "gear"
+            cost: "25 gp"
+            weight: 5
+            description: "A bound volume of knowledge on a specific topic."
+        candle:
+            name: "Candle"
+            type: "gear"
+            cost: "1 cp"
+            weight: 0
+            description: "For 1 hour, a candle sheds bright light in a 5-foot radius."
+        censer:
+            name: "Censer"
+            type: "gear"
+            cost: "5 gp"
+            weight: 2
+            description: "A metallic container for burning incense."
+        costume:
+            name: "Costume"
+            type: "gear"
+            cost: "5 gp"
+            weight: 4
+            description: "A set of themed clothes for performances."
+        crowbar:
+            name: "Crowbar"
+            type: "gear"
+            cost: "2 gp"
+            weight: 5
+            description: "Using a crowbar grants advantage to Strength checks where leverage can be applied."
+        disguise_kit:
+            name: "Disguise Kit"
+            type: "gear"
+            cost: "25 gp"
+            weight: 3
+            description: "A pouch of cosmetics, hair dye, and small props."
+        fine_clothes:
+            name: "Fine Clothes"
+            type: "gear"
+            cost: "15 gp"
+            weight: 6
+            description: "High-quality clothing suitable for nobility."
+        hammer:
+            name: "Hammer"
+            type: "gear"
+            cost: "1 gp"
+            weight: 3
+            description: "A standard hammer used for construction and setting pitons."
+        hooded_lantern:
+            name: "Hooded Lantern"
+            type: "gear"
+            cost: "5 gp"
+            weight: 2
+            description: "Sheds bright light in a 30-foot radius and dim light for an additional 30 feet."
+        ink:
+            name: "Ink"
+            type: "gear"
+            cost: "10 gp"
+            weight: 0
+            unit:
+                amount: 1
+                measure: "ounce"
+            description: "A bottle of black ink for writing."
+        ink_pen:
+            name: "Ink Pen"
+            type: "gear"
+            cost: "2 cp"
+            weight: 0
+            description: "A wooden pen with metal nib for writing."
+        makeup:
+            name: "Makeup Kit"
+            type: "gear"
+            cost: "1 gp"
+            weight: 0.5
+            description: "A small kit with cosmetics and face paint."
+        mess_kit:
+            name: "Mess Kit"
+            type: "gear"
+            cost: "2 sp"
+            weight: 1
+            description: "Includes a cup, cutlery, and plate for eating."
+        oil_flask:
+            name: "Oil Flask"
+            type: "gear"
+            cost: "1 sp"
+            weight: 1
+            description: "Oil can be used as fuel or thrown as a weapon."
+        paper:
+            name: "Paper"
+            type: "gear"
+            cost: "2 sp"
+            weight: 0
+            unit:
+                amount: 1
+                measure: "sheet"
+            description: "A sheet of high-quality paper."
+        parchment:
+            name: "Parchment"
+            type: "gear"
+            cost: "1 sp"
+            weight: 0
+            unit:
+                amount: 1
+                measure: "sheet"
+            description: "A sheet of animal skin prepared for writing."
+        perfume:
+            name: "Perfume"
+            type: "gear"
+            cost: "5 gp"
+            weight: 0
+            description: "A vial of pleasant-smelling perfume."
+        piton:
+            name: "Piton"
+            type: "gear"
+            cost: "5 cp"
+            weight: 0.25
+            description: "Used for securing ropes when climbing."
+        rations:
+            name: "Rations"
+            type: "gear"
+            cost: "5 sp"
+            weight: 2
+            unit:
+                amount: 1
+                measure: "day"
+            description: "Food suitable for extended travel."
+        sand:
+            name: "Sand"
+            type: "gear"
+            cost: "1 cp"
+            weight: 0.5
+            description: "Fine sand used to dry ink."
+        sealing_wax:
+            name: "Sealing Wax"
+            type: "gear"
+            cost: "5 sp"
+            weight: 0
+            description: "Used to seal letters and documents."
+        shovel:
+            name: "Shovel"
+            type: "gear"
+            cost: "2 gp"
+            weight: 5
+            description: "A sturdy digging tool."
+        soap:
+            name: "Soap"
+            type: "gear"
+            cost: "2 cp"
+            weight: 0
+            description: "A bar of clean-smelling soap."
+        spellbook:
+            name: "Spellbook"
+            type: "gear"
+            cost: "50 gp"
+            weight: 3
+            description: "Essential for wizards to record their spells."
+        string:
+            name: "String"
+            type: "gear"
+            cost: "1 cp"
+            weight: 0
+            unit:
+                amount: 10
+                measure: "feet"
+            description: "A simple piece of string or twine."
+        tinderbox:
+            name: "Tinderbox"
+            type: "gear"
+            cost: "5 sp"
+            weight: 1
+            description: "Contains flint, fire steel, and tinder."
+        torch:
+            name: "Torch"
+            type: "gear"
+            cost: "1 cp"
+            weight: 1
+            description: "Burns for 1 hour, providing bright light in a 20-foot radius."
+        vestments:
+            name: "Vestments"
+            type: "gear"
+            cost: "5 gp"
+            weight: 4
+            description: "Religious ceremonial clothing."
+
+    holy_symbols:
+        amulet:
+            name: "Holy Symbol (Amulet)"
+            type: "holy_symbol"
+            cost: "5 gp"
+            weight: 1
+            description: "A holy symbol worn as an amulet."
+        emblem:
+            name: "Holy Symbol (Emblem)"
+            type: "holy_symbol"
+            cost: "5 gp"
+            weight: 0
+            description: "A holy symbol emblazoned on a shield or worn piece of clothing."
+        reliquary:
+            name: "Holy Symbol (Reliquary)"
+            type: "holy_symbol"
+            cost: "5 gp"
+            weight: 2
+            description: "A holy symbol built into a box containing sacred relics."
+
+    instruments:
+        bagpipes:
+            name: "Bagpipes"
+            type: "instrument"
+            cost: "30 gp"
+            weight: 6
+            description: "A wind instrument with multiple pipes."
+        drum:
+            name: "Drum"
+            type: "instrument"
+            cost: "6 gp"
+            weight: 3
+            description: "A percussion instrument."
+        flute:
+            name: "Flute"
+            type: "instrument"
+            cost: "2 gp"
+            weight: 1
+            description: "A wind instrument."
+        horn:
+            name: "Horn"
+            type: "instrument"
+            cost: "3 gp"
+            weight: 2
+            description: "A brass instrument."
+        lute:
+            name: "Lute"
+            type: "instrument"
+            cost: "35 gp"
+            weight: 2
+            description: "A stringed instrument."
+        lyre:
+            name: "Lyre"
+            type: "instrument"
+            cost: "30 gp"
+            weight: 2
+            description: "A small stringed instrument."
+        pan_flute:
+            name: "Pan Flute"
+            type: "instrument"
+            cost: "12 gp"
+            weight: 2
+            description: "A wind instrument with multiple pipes."
+    weapons:
+        martial_melee:
+            battleaxe:
+                name: "Battleaxe"
+                type: "weapon"
+                subtype: "martial_melee"
+                cost: "10 gp"
+                damage: "1d8"
+                damage_type: "slashing"
+                weight: 4
+                properties: ["Versatile"]
+                versatile_damage: "1d10"
+                description: "A versatile axe that can be wielded with one or two hands."
+            flail:
+                name: "Flail"
+                type: "weapon"
+                subtype: "martial_melee"
+                cost: "10 gp"
+                damage: "1d8"
+                damage_type: "bludgeoning"
+                weight: 2
+                properties: []
+                description: "A handle attached to a spiked ball by a chain."
+            glaive:
+                name: "Glaive"
+                type: "weapon"
+                subtype: "martial_melee"
+                cost: "20 gp"
+                damage: "1d10"
+                damage_type: "slashing"
+                weight: 6
+                properties: ["Heavy", "Reach", "Two-handed"]
+                description: "A long-handled blade with extended reach."
+            greataxe:
+                name: "Greataxe"
+                type: "weapon"
+                subtype: "martial_melee"
+                cost: "30 gp"
+                damage: "1d12"
+                damage_type: "slashing"
+                weight: 7
+                properties: ["Heavy", "Two-handed"]
+                description: "A large, two-handed axe."
+            greatsword:
+                name: "Greatsword"
+                type: "weapon"
+                subtype: "martial_melee"
+                cost: "50 gp"
+                damage: "2d6"
+                damage_type: "slashing"
+                weight: 6
+                properties: ["Heavy", "Two-handed"]
+                description: "A large, two-handed sword."
+            longsword:
+                name: "Longsword"
+                type: "weapon"
+                subtype: "martial_melee"
+                cost: "15 gp"
+                damage: "1d8"
+                damage_type: "slashing"
+                weight: 3
+                properties: ["Versatile"]
+                versatile_damage: "1d10"
+                description: "A versatile sword that can be wielded with one or two hands."
+            maul:
+                name: "Maul"
+                type: "weapon"
+                subtype: "martial_melee"
+                cost: "10 gp"
+                damage: "2d6"
+                damage_type: "bludgeoning"
+                weight: 10
+                properties: ["Heavy", "Two-handed"]
+                description: "A large, heavy hammer."
+            morningstar:
+                name: "Morningstar"
+                type: "weapon"
+                subtype: "martial_melee"
+                cost: "15 gp"
+                damage: "1d8"
+                damage_type: "piercing"
+                weight: 4
+                properties: []
+                description: "A spiked mace."
+            rapier:
+                name: "Rapier"
+                type: "weapon"
+                subtype: "martial_melee"
+                cost: "25 gp"
+                damage: "1d8"
+                damage_type: "piercing"
+                weight: 2
+                properties: ["Finesse"]
+                description: "A thin blade designed for precise thrusts."
+            warhammer:
+                name: "Warhammer"
+                type: "weapon"
+                subtype: "martial_melee"
+                cost: "15 gp"
+                damage: "1d8"
+                damage_type: "bludgeoning"
+                weight: 2
+                properties: ["Versatile"]
+                versatile_damage: "1d10"
+                description: "A versatile hammer that can be wielded with one or two hands."
+
+        martial_ranged:
+            hand_crossbow:
+                name: "Hand Crossbow"
+                type: "weapon"
+                subtype: "martial_ranged"
+                cost: "75 gp"
+                damage: "1d6"
+                damage_type: "piercing"
+                weight: 3
+                properties: ["Ammunition", "Light", "Loading"]
+                range: "30/120"
+                description: "A light crossbow that can be used with one hand."
+            heavy_crossbow:
+                name: "Heavy Crossbow"
+                type: "weapon"
+                subtype: "martial_ranged"
+                cost: "50 gp"
+                damage: "1d10"
+                damage_type: "piercing"
+                weight: 18
+                properties: ["Ammunition", "Heavy", "Loading", "Two-handed"]
+                range: "100/400"
+                description: "A powerful crossbow that requires two hands to use."
+            longbow:
+                name: "Longbow"
+                type: "weapon"
+                subtype: "martial_ranged"
+                cost: "50 gp"
+                damage: "1d8"
+                damage_type: "piercing"
+                weight: 2
+                properties: ["Ammunition", "Heavy", "Two-handed"]
+                range: "150/600"
+                description: "A tall bow with exceptional range."
+
+        simple_melee:
+            club:
+                name: "Club"
+                type: "weapon"
+                subtype: "simple_melee"
+                cost: "1 sp"
+                damage: "1d4"
+                damage_type: "bludgeoning"
+                weight: 2
+                properties: ["Light"]
+                description: "A simple wooden club."
+            dagger:
+                name: "Dagger"
+                type: "weapon"
+                subtype: "simple_melee"
+                cost: "2 gp"
+                damage: "1d4"
+                damage_type: "piercing"
+                weight: 1
+                properties: ["Finesse", "Light", "Thrown"]
+                range: "20/60"
+                description: "A small blade that can be thrown."
+            greatclub:
+                name: "Greatclub"
+                type: "weapon"
+                subtype: "simple_melee"
+                cost: "2 sp"
+                damage: "1d8"
+                damage_type: "bludgeoning"
+                weight: 10
+                properties: ["Two-handed"]
+                description: "A large wooden club."
+            handaxe:
+                name: "Handaxe"
+                type: "weapon"
+                subtype: "simple_melee"
+                cost: "5 gp"
+                damage: "1d6"
+                damage_type: "slashing"
+                weight: 2
+                properties: ["Light", "Thrown"]
+                range: "20/60"
+                description: "A light axe that can be thrown."
+            javelin:
+                name: "Javelin"
+                type: "weapon"
+                subtype: "simple_melee"
+                cost: "5 sp"
+                damage: "1d6"
+                damage_type: "piercing"
+                weight: 2
+                properties: ["Thrown"]
+                range: "30/120"
+                description: "A light spear designed for throwing."
+            light_hammer:
+                name: "Light Hammer"
+                type: "weapon"
+                subtype: "simple_melee"
+                cost: "2 gp"
+                damage: "1d4"
+                damage_type: "bludgeoning"
+                weight: 2
+                properties: ["Light", "Thrown"]
+                range: "20/60"
+                description: "A light hammer that can be thrown."
+            mace:
+                name: "Mace"
+                type: "weapon"
+                subtype: "simple_melee"
+                cost: "5 gp"
+                damage: "1d6"
+                damage_type: "bludgeoning"
+                weight: 4
+                properties: []
+                description: "A simple bludgeoning weapon."
+            quarterstaff:
+                name: "Quarterstaff"
+                type: "weapon"
+                subtype: "simple_melee"
+                cost: "2 sp"
+                damage: "1d6"
+                damage_type: "bludgeoning"
+                weight: 4
+                properties: ["Versatile"]
+                versatile_damage: "1d8"
+                description: "A wooden staff that can be wielded with one or two hands."
+            sickle:
+                name: "Sickle"
+                type: "weapon"
+                subtype: "simple_melee"
+                cost: "1 gp"
+                damage: "1d4"
+                damage_type: "slashing"
+                weight: 2
+                properties: ["Light"]
+                description: "A curved farming tool used as a weapon."
+            spear:
+                name: "Spear"
+                type: "weapon"
+                subtype: "simple_melee"
+                cost: "1 gp"
+                damage: "1d6"
+                damage_type: "piercing"
+                weight: 3
+                properties: ["Thrown", "Versatile"]
+                range: "20/60"
+                versatile_damage: "1d8"
+                description: "A simple spear that can be thrown or used in melee."
+
+        simple_ranged:
+            light_crossbow:
+                name: "Light Crossbow"
+                type: "weapon"
+                subtype: "simple_ranged"
+                cost: "25 gp"
+                damage: "1d8"
+                damage_type: "piercing"
+                weight: 5
+                properties: ["Ammunition", "Loading", "Two-handed"]
+                range: "80/320"
+                description: "A simple crossbow."
+            shortbow:
+                name: "Shortbow"
+                type: "weapon"
+                subtype: "simple_ranged"
+                cost: "25 gp"
+                damage: "1d6"
+                damage_type: "piercing"
+                weight: 2
+                properties: ["Ammunition", "Two-handed"]
+                range: "80/320"
+                description: "A simple bow."
+            sling:
+                name: "Sling"
+                type: "weapon"
+                subtype: "simple_ranged"
+                cost: "1 sp"
+                damage: "1d4"
+                damage_type: "bludgeoning"
+                weight: 0
+                properties: ["Ammunition"]
+                range: "30/120"
+                description: "A simple leather strap for hurling stones."
+
+# Move class_equipment to root level
 class_equipment:
-    rogue:
-        option_sets:
-            - choices:
-                  - ["rapier"]
-                  - ["shortsword"]
-            - choices:
-                  - ["shortbow", "20 arrows"] # Added arrows as they're needed with the bow
-                  - ["shortsword"]
-            - choices:
-                  - ["burglars_pack"]
-                  - ["dungeoneers_pack"]
-                  - ["explorers_pack"]
-            - fixed:
-                  - "leather_armor"
-                  - "dagger"
-                  - "thieves_tools"
-
     fighter:
         option_sets:
             - choices:
                   - ["chain_mail"]
                   - ["leather_armor", "longbow", "arrows"]
             - choices:
-                  - ["martial_melee_weapon", "shield"] # Changed from martial_weapon
-                  - ["two_martial_weapons"] # This is a special choice that will be handled in code
+                  - ["martial_melee_weapon", "shield"]
+                  - ["two_martial_weapons"]
             - choices:
                   - ["light_crossbow", "crossbow_bolts"]
-                  - ["hand_axe", "hand_axe"] # Explicitly list two hand axes
+                  - ["hand_axe", "hand_axe"]
             - choices:
                   - ["dungeoneers_pack"]
                   - ["explorers_pack"]
@@ -391,7 +940,7 @@ class_equipment:
             - choices:
                   - ["rapier"]
                   - ["long_sword"]
-                  - ["simple_melee_weapon"] # Changed from simple_weapon
+                  - ["simple_melee_weapon"]
             - choices:
                   - ["diplomats_pack"]
                   - ["entertainers_pack"]
@@ -421,441 +970,7 @@ class_equipment:
                   - "shield"
                   - "holy_symbol"
 
-    wizard:
-        option_sets:
-            - choices:
-                  - ["quarterstaff"]
-                  - ["dagger"]
-            - choices:
-                  - ["component_pouch"]
-                  - ["arcane_focus"]
-            - choices:
-                  - ["scholars_pack"]
-                  - ["explorers_pack"]
-            - fixed:
-                  - "spellbook"
-
-adventuring_gear_subclasses:
-    arcane_focus:
-        crystal:
-            name: "Crystal"
-            cost: "10 gp"
-            weight: 1
-        orb:
-            name: "Orb"
-            cost: "20 gp"
-            weight: 3
-        rod:
-            name: "Rod"
-            cost: "10 gp"
-            weight: 2
-        staff:
-            name: "Staff"
-            cost: "5 gp"
-            weight: 4
-        wand:
-            name: "Wand"
-            cost: "10 gp"
-            weight: 1
-    artisan_tools:
-        brewers_supplies:
-            name: "Brewer's supplies"
-            cost: "20 gp"
-            weight: 9
-        calligraphers_supplies:
-            name: "Calligrapher's supplies"
-            cost: "10 gp"
-            weight: 5
-        carpenters_tools:
-            name: "Carpenter's tools"
-            cost: "8 gp"
-            weight: 6
-        cartographers_tools:
-            name: "Cartographer's tools"
-            cost: "15 gp"
-            weight: 6
-        cobblers_tools:
-            name: "Cobbler's tools"
-            cost: "5 gp"
-            weight: 5
-        cooks_utensils:
-            name: "Cook's utensils"
-            cost: "1 gp"
-            weight: 8
-        jewelers_tools:
-            name: "Jeweler's tools"
-            cost: "25 gp"
-            weight: 2
-        leatherworkers_tools:
-            name: "Leatherworker's tools"
-            cost: "5 gp"
-            weight: 5
-        masons_tools:
-            name: "Mason's tools"
-            cost: "10 gp"
-            weight: 8
-        painters_supplies:
-            name: "Painter's supplies"
-            cost: "10 gp"
-            weight: 5
-        smiths_tools:
-            name: "Smith's tools"
-            cost: "20 gp"
-            weight: 8
-        tinkers_tools:
-            name: "Tinker's tools"
-            cost: "50 gp"
-            weight: 10
-        weavers_tools:
-            name: "Weaver's tools"
-            cost: "1 gp"
-            weight: 5
-        woodcarvers_tools:
-            name: "Woodcarver's tools"
-            cost: "1 gp"
-            weight: 5
-    gaming_set:
-        dice_set:
-            name: "Dice Set"
-            cost: "1 sp"
-            weight: 0
-        dragonchess_set:
-            name: "Dragonchess Set"
-            cost: "1 gp"
-            weight: 0.5
-        playing_card_set:
-            name: "Playing Card Set"
-            cost: "5 sp"
-            weight: 0
-        three_dragon_ante_set:
-            name: "Three-Dragon Ante Set"
-            cost: "1 gp"
-            weight: 0
-    holy_symbol:
-        amulet:
-            name: "Amulet"
-            cost: "5 gp"
-            weight: 1
-        emblem:
-            name: "Emblem"
-            cost: "5 gp"
-            weight: 0
-        reliquary:
-            name: "Reliquary"
-            cost: "5 gp"
-            weight: 0
-    musical_instruments:
-        bagpipes:
-            name: "Bagpipes"
-            cost: "30 gp"
-            weight: 6
-        drum:
-            name: "Drum"
-            cost: "6 gp"
-            weight: 3
-        flute:
-            name: "Flute"
-            cost: "2 gp"
-            weight: 1
-        lute:
-            name: "Lute"
-            cost: "35 gp"
-            weight: 2
-        lyre:
-            name: "Lyre"
-            cost: "30 gp"
-            weight: 2
-        horn:
-            name: "Horn"
-            cost: "3 gp"
-            weight: 2
-        pan_flute:
-            name: "Pan flute"
-            cost: "12 gp"
-            weight: 2
-
-adventuring_gear:
-    camping:
-        bedroll:
-            name: "Bedroll"
-            cost: "1 gp"
-            weight: 7
-            description: "A portable sleeping roll for resting outdoors."
-        mess_kit:
-            name: "Mess Kit"
-            cost: "2 sp"
-            weight: 1
-            description: "Includes a cup, cutlery, and plate for eating."
-        torch:
-            name: "Torch"
-            cost: "1 cp"
-            weight: 1
-            description: "Burns for 1 hour, providing bright light in a 20-foot radius."
-        blanket:
-            name: "Blanket"
-            cost: "5 sp"
-            weight: 3
-            description: "A warm blanket for cold nights."
-        tinderbox:
-            name: "Tinderbox"
-            cost: "5 sp"
-            weight: 1
-            description: "Used to start fires. Contains flint, steel, and tinder."
-        waterskin:
-            name: "Waterskin"
-            cost: "2 sp"
-            weight: 5
-            description: "Holds 4 pints of liquid."
-        rations:
-            name: "Rations (1 day)"
-            cost: "5 sp"
-            weight: 2
-            description: "Food suitable for extended travel."
-        hempen_rope:
-            name: "Hempen Rope (50 feet)"
-            cost: "1 gp"
-            weight: 10
-            description: "Strong rope that can support up to 2000 pounds."
-
-    climbing_gear:
-        piton:
-            name: "Piton"
-            cost: "5 cp"
-            weight: 0.25
-            description: "Used for securing ropes when climbing."
-        hempen_rope:
-            name: "Hempen Rope (50 feet)"
-            cost: "1 gp"
-            weight: 10
-            description: "Has 2 hit points and can be burst with a DC 17 Strength check."
-
-    clothing:
-        fine_clothes:
-            name: "Fine Clothes"
-            cost: "15 gp"
-            weight: 6
-            description: "High-quality clothing suitable for nobility or diplomatic functions."
-        costume:
-            name: "Costume"
-            cost: "5 gp"
-            weight: 4
-            description: "A set of themed clothes for performances."
-
-    containers:
-        backpack:
-            name: "Backpack"
-            cost: "2 gp"
-            weight: 5
-            capacity: 30 # in pounds
-            description: "A backpack can hold up to 30 pounds of gear."
-        chest:
-            name: "Chest"
-            cost: "5 gp"
-            weight: 25
-            capacity: 300 # in pounds
-            description: "A sturdy wooden chest."
-        map_case:
-            name: "Map or Scroll Case"
-            cost: "1 gp"
-            weight: 1
-            description: "A sturdy tube for storing maps and scrolls."
-        bottle:
-            name: "Glass Bottle"
-            cost: "2 gp"
-            weight: 2
-            description: "A glass bottle that holds 1.5 pints of liquid."
-
-    cosmetics:
-        makeup:
-            name: "Makeup Kit"
-            cost: "1 gp"
-            weight: 0.5
-            description: "A small kit with cosmetics and face paint for performances."
-
-    light_sources:
-        hooded_lantern:
-            name: "Hooded Lantern"
-            cost: "5 gp"
-            weight: 2
-            description: "Sheds bright light in a 30-foot radius and dim light for an additional 30 feet. Burns for 6 hours on a flask of oil."
-        candle:
-            name: "Candle"
-            cost: "1 cp"
-            weight: 0
-            description: "For 1 hour, a candle sheds bright light in a 5-foot radius and dim light for an additional 5 feet."
-
-    miscellaneous:
-        ball_bearings:
-            name: "Ball Bearings (bag of 1000)"
-            cost: "1 gp"
-            weight: 2
-            description: "As an action, you can spill these tiny metal balls to cover a 10-foot-square area."
-        string:
-            name: "String (10 feet)"
-            cost: "1 cp"
-            weight: 0
-            description: "A simple piece of string or twine."
-        oil_flask:
-            name: "Oil (flask)"
-            cost: "1 sp"
-            weight: 1
-            description: "Oil can be used as fuel or thrown as a weapon."
-        tinderbox:
-            name: "Tinderbox"
-            cost: "5 sp"
-            weight: 1
-            description: "Contains flint, fire steel, and tinder. Lighting a torch with it takes an action."
-        rations:
-            name: "Rations (1 day)"
-            cost: "5 sp"
-            weight: 2
-            description: "Food suitable for extended travel."
-        waterskin:
-            name: "Waterskin"
-            cost: "2 sp"
-            weight: 5 # when full
-            description: "Holds 4 pints of liquid."
-        soap:
-            name: "Soap"
-            cost: "2 cp"
-            weight: 0
-            description: "A bar of clean-smelling soap."
-        perfume:
-            name: "Perfume (vial)"
-            cost: "5 gp"
-            weight: 0
-            description: "A vial of pleasant-smelling perfume."
-        bedroll:
-            name: "Bedroll"
-            cost: "1 gp"
-            weight: 7
-            description: "A portable sleeping roll for resting."
-        backpack:
-            name: "Backpack"
-            cost: "2 gp"
-            weight: 5
-            description: "A leather pack for carrying gear."
-
-    props:
-        disguise_kit:
-            name: "Disguise Kit"
-            cost: "25 gp"
-            weight: 3
-            description: "A pouch of cosmetics, hair dye, and small props for creating disguises."
-    scholarly_supplies:
-        book:
-            name: "Book"
-            cost: "25 gp"
-            weight: 5
-            description: "A bound volume of knowledge on a specific topic."
-        ink:
-            name: "Ink (1 ounce bottle)"
-            cost: "10 gp"
-            weight: 0
-            description: "A bottle of black ink for writing."
-        ink_pen:
-            name: "Ink Pen"
-            cost: "2 cp"
-            weight: 0
-            description: "A wooden pen with metal nib for writing."
-        letter:
-            name: "Letter"
-            cost: "2 sp"
-            weight: 0
-            description: "A single sheet of high-quality paper."
-        paper:
-            name: "Paper (one sheet)"
-            cost: "2 sp"
-            weight: 0
-            description: "A sheet of high-quality paper."
-        parchment:
-            name: "Parchment (one sheet)"
-            cost: "1 sp"
-            weight: 0
-            description: "A sheet of animal skin prepared for writing."
-        sand:
-            name: "Sand (small bag)"
-            cost: "1 cp"
-            weight: 0.5
-            description: "Fine sand used to dry ink."
-
-    religious_items:
-        holy_symbol:
-            name: "Holy Symbol"
-            cost: "5 gp"
-            weight: 1
-            description: "A divine focus used for casting spells."
-        block_of_incense:
-            name: "Block of Incense"
-            cost: "1 gp"
-            weight: 0
-            description: "A block of fragrant incense for religious ceremonies."
-        censer:
-            name: "Censer"
-            cost: "5 gp"
-            weight: 2
-            description: "A metallic container for burning incense."
-        vestments:
-            name: "Vestments"
-            cost: "5 gp"
-            weight: 4
-            description: "Religious ceremonial clothing."
-        alms_box:
-            name: "Alms Box"
-            cost: "5 sp"
-            weight: 1
-            description: "A small box for collecting donations."
-
-    tools:
-        crowbar:
-            name: "Crowbar"
-            cost: "2 gp"
-            weight: 5
-            description: "Using a crowbar grants advantage to Strength checks where the crowbar's leverage can be applied."
-        hammer:
-            name: "Hammer"
-            cost: "1 gp"
-            weight: 3
-            description: "A standard hammer used for construction and setting pitons."
-        bell:
-            name: "Bell"
-            cost: "1 gp"
-            weight: 0
-            description: "A small bell that can be used for signaling."
-        shovel:
-            name: "Shovel"
-            cost: "2 gp"
-            weight: 5
-            description: "A sturdy digging tool."
-
-    writing_supplies:
-        ink:
-            name: "Ink (1 ounce bottle)"
-            cost: "10 gp"
-            weight: 0
-            description: "A bottle of black ink for writing."
-        ink_pen:
-            name: "Ink Pen"
-            cost: "2 cp"
-            weight: 0
-            description: "A wooden pen with metal nib for writing."
-        sealing_wax:
-            name: "Sealing Wax"
-            cost: "5 sp"
-            weight: 0
-            description: "Used to seal letters and documents."
-        paper:
-            name: "Paper (one sheet)"
-            cost: "2 sp"
-            weight: 0
-            description: "A sheet of high-quality paper."
-        parchment:
-            name: "Parchment (one sheet)"
-            cost: "1 sp"
-            weight: 0
-            description: "A sheet of animal skin prepared for writing."
-
-# Equipment Packs
+# Pack definitions
 packs:
     burglars_pack:
         name: "Burglar's Pack"
@@ -863,56 +978,83 @@ packs:
         contents:
             - reference: "backpack"
               quantity: 1
+              type: "container"
             - reference: "ball_bearings"
-              quantity: 1 # One bag of 1000
-            - reference: "string"
-              quantity: 1 # 10 feet
+              quantity: 1
+              type: "gear"
             - reference: "bell"
               quantity: 1
+              type: "gear"
             - reference: "candle"
               quantity: 5
+              type: "gear"
             - reference: "crowbar"
               quantity: 1
+              type: "gear"
             - reference: "hammer"
               quantity: 1
-            - reference: "piton"
-              quantity: 10
+              type: "gear"
+            - reference: "hempen_rope"
+              quantity: 1
+              type: "gear"
             - reference: "hooded_lantern"
               quantity: 1
+              type: "gear"
             - reference: "oil_flask"
               quantity: 2
+              type: "gear"
+            - reference: "piton"
+              quantity: 10
+              type: "gear"
             - reference: "rations"
-              quantity: 5 # 5 days
+              quantity: 5
+              type: "gear"
+            - reference: "string"
+              quantity: 1
+              type: "gear"
             - reference: "tinderbox"
               quantity: 1
+              type: "gear"
             - reference: "waterskin"
               quantity: 1
-            - reference: "hempen_rope"
-              quantity: 1 # One 50-foot length
+              type: "container"
+        description: "Contains the essential tools for burgling and dungeon delving."
+
     diplomats_pack:
         name: "Diplomat's Pack"
         cost: "39 gp"
         contents:
             - reference: "chest"
               quantity: 1
-            - reference: "map_case"
-              quantity: 2
+              type: "container"
             - reference: "fine_clothes"
               quantity: 1
+              type: "gear"
             - reference: "ink"
               quantity: 1
+              type: "gear"
             - reference: "ink_pen"
               quantity: 1
+              type: "gear"
+            - reference: "map_case"
+              quantity: 2
+              type: "container"
             - reference: "paper"
               quantity: 10
-            - reference: "sealing_wax"
-              quantity: 1
+              type: "gear"
             - reference: "parchment"
               quantity: 5
-            - reference: "soap"
-              quantity: 1
+              type: "gear"
             - reference: "perfume"
               quantity: 1
+              type: "gear"
+            - reference: "sealing_wax"
+              quantity: 1
+              type: "gear"
+            - reference: "soap"
+              quantity: 1
+              type: "gear"
+        description: "Contains items needed for diplomatic missions and formal occasions."
 
     dungeoneers_pack:
         name: "Dungeoneer's Pack"
@@ -920,62 +1062,92 @@ packs:
         contents:
             - reference: "backpack"
               quantity: 1
+              type: "container"
             - reference: "crowbar"
               quantity: 1
+              type: "gear"
             - reference: "hammer"
               quantity: 1
+              type: "gear"
+            - reference: "hempen_rope"
+              quantity: 1
+              type: "gear"
             - reference: "piton"
               quantity: 10
-            - reference: "torch"
-              quantity: 10
-            - reference: "tinderbox"
-              quantity: 1
+              type: "gear"
             - reference: "rations"
               quantity: 10
+              type: "gear"
+            - reference: "tinderbox"
+              quantity: 1
+              type: "gear"
+            - reference: "torch"
+              quantity: 10
+              type: "gear"
             - reference: "waterskin"
               quantity: 1
-            - reference: "hempen_rope"
-              quantity: 1 # 50 feet
+              type: "container"
+        description: "Contains essential equipment for dungeon exploration."
+
     entertainers_pack:
         name: "Entertainer's Pack"
         cost: "40 gp"
         contents:
             - reference: "backpack"
               quantity: 1
+              type: "container"
             - reference: "bedroll"
               quantity: 1
-            - reference: "costume"
-              quantity: 2
+              type: "gear"
             - reference: "candle"
               quantity: 5
-            - reference: "rations"
-              quantity: 5
-            - reference: "waterskin"
-              quantity: 1
-            - reference: "makeup"
-              quantity: 1
+              type: "gear"
+            - reference: "costume"
+              quantity: 2
+              type: "gear"
             - reference: "disguise_kit"
               quantity: 1
+              type: "gear"
+            - reference: "makeup"
+              quantity: 1
+              type: "gear"
+            - reference: "rations"
+              quantity: 5
+              type: "gear"
+            - reference: "waterskin"
+              quantity: 1
+              type: "container"
+        description: "Contains items needed for performances and entertainment."
+
     explorers_pack:
         name: "Explorer's Pack"
         cost: "10 gp"
         contents:
             - reference: "backpack"
               quantity: 1
+              type: "container"
             - reference: "bedroll"
               quantity: 1
+              type: "gear"
+            - reference: "hempen_rope"
+              quantity: 1
+              type: "gear"
             - reference: "mess_kit"
               quantity: 1
-            - reference: "tinderbox"
-              quantity: 1
-            - reference: "torch"
-              quantity: 10
+              type: "gear"
             - reference: "rations"
               quantity: 10
+              type: "gear"
+            - reference: "tinderbox"
+              quantity: 1
+              type: "gear"
+            - reference: "torch"
+              quantity: 10
+              type: "gear"
             - reference: "waterskin"
               quantity: 1
-            - reference: "hempen_rope"
-              quantity: 1 # 50 feet
+              type: "container"
+        description: "Contains essential gear for wilderness exploration."
 
     priests_pack:
         name: "Priest's Pack"
@@ -983,24 +1155,35 @@ packs:
         contents:
             - reference: "backpack"
               quantity: 1
-            - reference: "blanket"
-              quantity: 1
-            - reference: "candle"
-              quantity: 10
-            - reference: "tinderbox"
-              quantity: 1
+              type: "container"
             - reference: "alms_box"
               quantity: 1
+              type: "gear"
+            - reference: "blanket"
+              quantity: 1
+              type: "gear"
             - reference: "block_of_incense"
               quantity: 2
+              type: "gear"
+            - reference: "candle"
+              quantity: 10
+              type: "gear"
             - reference: "censer"
               quantity: 1
-            - reference: "vestments"
-              quantity: 1
+              type: "gear"
             - reference: "rations"
               quantity: 2
+              type: "gear"
+            - reference: "tinderbox"
+              quantity: 1
+              type: "gear"
+            - reference: "vestments"
+              quantity: 1
+              type: "gear"
             - reference: "waterskin"
               quantity: 1
+              type: "container"
+        description: "Contains items needed for religious ceremonies and travel."
 
     scholars_pack:
         name: "Scholar's Pack"
@@ -1008,15 +1191,23 @@ packs:
         contents:
             - reference: "backpack"
               quantity: 1
+              type: "container"
             - reference: "book"
               quantity: 1
+              type: "gear"
             - reference: "ink"
               quantity: 1
+              type: "gear"
             - reference: "ink_pen"
               quantity: 1
-            - reference: "paper"
-              quantity: 10
-            - reference: "sand"
-              quantity: 1
+              type: "gear"
             - reference: "map_case"
               quantity: 1
+              type: "container"
+            - reference: "paper"
+              quantity: 10
+              type: "gear"
+            - reference: "sand"
+              quantity: 1
+              type: "gear"
+        description: "Contains items needed for scholarly work and research."

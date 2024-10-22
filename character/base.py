@@ -188,60 +188,92 @@ class Character:
         
         self.inventory.append(item)
         print(f"Added {item.name}" + (f" (×{final_quantity})" if final_quantity > 1 else ""))
+
+    def _find_item_by_category(self, name: str, category: str) -> Optional[Dict]:
+        """Find an item in a specific equipment category"""
+        normalized_name = self._normalize_item_name(name)
+        equipment = self.config.equipment
+
+        if category in equipment:
+            category_data = equipment[category]
+            # Search through subcategories
+            for subcategory in category_data.values():
+                if isinstance(subcategory, dict):
+                    # Try direct match
+                    if normalized_name in subcategory:
+                        return subcategory[normalized_name]
+                    # Try matching by name field
+                    for item_data in subcategory.values():
+                        if isinstance(item_data, dict) and 'name' in item_data:
+                            if self._normalize_item_name(item_data['name']) == normalized_name:
+                                return item_data
+
+        return None
     
+    def _find_weapon(self, name: str) -> Optional[Dict]:
+        """Specifically search for weapons"""
+        normalized_name = self._normalize_item_name(name)
+        weapons = self.config.equipment.get('weapons', {})
+        
+        for category in weapons.values():
+            if isinstance(category, dict):
+                if normalized_name in category:
+                    return category[normalized_name]
+                for weapon_data in category.values():
+                    if isinstance(weapon_data, dict) and 'name' in weapon_data:
+                        if self._normalize_item_name(weapon_data['name']) == normalized_name:
+                            return weapon_data
+                            
+        return None
+
+    def _find_armor(self, name: str) -> Optional[Dict]:
+        """Specifically search for armor"""
+        normalized_name = self._normalize_item_name(name)
+        armor = self.config.equipment.get('armor', {})
+        
+        for category in armor.values():
+            if isinstance(category, dict):
+                if normalized_name in category:
+                    return category[normalized_name]
+                for armor_data in category.values():
+                    if isinstance(armor_data, dict) and 'name' in armor_data:
+                        if self._normalize_item_name(armor_data['name']) == normalized_name:
+                            return armor_data
+                            
+        return None
     
     def _normalize_item_name(self, name: str) -> str:
         """Normalize item name for comparison (e.g., 'Chain Mail' -> 'chain_mail')"""
         return name.lower().replace(' ', '_')
 
     def _find_item_in_config(self, name: str) -> Optional[Dict]:
-        """Enhanced item search to include adventuring gear"""
+        """Enhanced item search across all equipment categories"""
         normalized_name = self._normalize_item_name(name)
         equipment = self.config.equipment
-        
-        # Search armor
-        for category in equipment['armor'].values():
-            if normalized_name in category:
-                return category[normalized_name]
-            for item_key, item_data in category.items():
-                if self._normalize_item_name(item_data['name']) == normalized_name:
-                    return item_data
-        
-        # Search weapons
-        for category in equipment['weapons'].values():
-            if normalized_name in category:
-                return category[normalized_name]
-            for item_key, item_data in category.items():
-                if self._normalize_item_name(item_data['name']) == normalized_name:
-                    return item_data
-        
-        # Search adventuring gear
-        if 'adventuring_gear' in equipment:
-            for category in equipment['adventuring_gear'].values():
-                if normalized_name in category:
-                    return category[normalized_name]
-                for item_key, item_data in category.items():
-                    if self._normalize_item_name(item_data['name']) == normalized_name:
-                        return item_data
-        
-        # Search adventuring gear subclasses
-        if 'adventuring_gear_subclasses' in equipment:
-            for subclass in equipment['adventuring_gear_subclasses'].values():
-                if normalized_name in subclass:
-                    return subclass[normalized_name]
-                for item_key, item_data in subclass.items():
-                    if self._normalize_item_name(item_data['name']) == normalized_name:
-                        return item_data
-        
-        # Search packs
-        if 'packs' in equipment:
-            if normalized_name in equipment['packs']:
-                return equipment['packs'][normalized_name]
-        
-        # Search musical instruments
-        if normalized_name in equipment['adventuring_gear_subclasses']['musical_instruments']:
-            return equipment['adventuring_gear_subclasses']['musical_instruments'][normalized_name]
-        
+
+        # Search through each equipment category
+        for category, category_data in equipment.items():
+            # Handle nested categories (like weapons.martial_melee)
+            if isinstance(category_data, dict):
+                # First level search (for items directly in category)
+                if normalized_name in category_data:
+                    return category_data[normalized_name]
+
+                # Search through subcategories
+                for subcategory_name, subcategory in category_data.items():
+                    if isinstance(subcategory, dict):
+                        # Direct key match
+                        if normalized_name in subcategory:
+                            return subcategory[normalized_name]
+                        
+                        # Search by normalized name in subcategory
+                        for item_key, item_data in subcategory.items():
+                            if isinstance(item_data, dict) and 'name' in item_data:
+                                if self._normalize_item_name(item_data['name']) == normalized_name:
+                                    return item_data
+
+        # Debug output
+        print(f"Debug: Could not find item '{name}' (normalized: '{normalized_name}')")
         return None
     
     def _parse_currency(self, cost_str: str) -> float:
@@ -414,11 +446,12 @@ class Character:
         for content in pack_data['contents']:
             ref = content['reference']
             quantity = content['quantity']
+            item_type = content.get('type', 'gear')  # Default to 'gear' if not specified
             
-            # Find the referenced item in adventuring_gear
-            item_data = self._find_referenced_item(ref)
+            # Find the referenced item in the appropriate category
+            item_data = self._find_item_by_type(ref, item_type)
             if not item_data:
-                print(f"Warning: Item not found: {ref}")
+                print(f"Warning: Item not found: {ref} (type: {item_type})")
                 continue
             
             try:
@@ -444,6 +477,46 @@ class Character:
         print(f"Total Value: {total_value:.2f} gp")
         if abs(total_value - expected_cost) > 0.01:
             print(f"Note: Pack cost ({expected_cost} gp) differs from sum of items ({total_value:.2f} gp)")
+
+    def _find_item_by_type(self, item_name: str, item_type: str) -> Optional[Dict]:
+        """Find an item by its type category"""
+        normalized_name = self._normalize_item_name(item_name)
+        equipment = self.config.equipment
+
+        # Handle special cases based on item_type
+        if item_type == "weapon":
+            weapon_categories = ["simple_melee", "simple_ranged", "martial_melee", "martial_ranged"]
+            for subtype in weapon_categories:
+                if subtype in equipment['weapons']:
+                    if normalized_name in equipment['weapons'][subtype]:
+                        return equipment['weapons'][subtype][normalized_name]
+
+        # For other types, look in the appropriate category
+        if item_type in equipment:
+            category = equipment[item_type]
+            # Check for nested subcategories
+            for subcategory in category.values():
+                if isinstance(subcategory, dict):
+                    if normalized_name in subcategory:
+                        return subcategory[normalized_name]
+                    # Try matching by normalized name
+                    for item_data in subcategory.values():
+                        if isinstance(item_data, dict) and \
+                           self._normalize_item_name(item_data.get('name', '')) == normalized_name:
+                            return item_data
+
+        # Try looking in gear category as fallback
+        if 'gear' in equipment:
+            for subcategory in equipment['gear'].values():
+                if isinstance(subcategory, dict):
+                    if normalized_name in subcategory:
+                        return subcategory[normalized_name]
+                    for item_data in subcategory.values():
+                        if isinstance(item_data, dict) and \
+                           self._normalize_item_name(item_data.get('name', '')) == normalized_name:
+                            return item_data
+
+        return None
 
     def _find_referenced_item(self, reference: str) -> Optional[Dict]:
         """Find an item in adventuring_gear by its reference key"""

@@ -7,17 +7,29 @@ class EquipmentCreator(CreatorInterface):
     """Handles equipment selection"""
     
     def handle(self, character: Character) -> None:
-        if not character.class_name or character.class_name not in self.config.equipment['class_equipment']:
+        """Handle equipment selection for the character"""
+        if not character.class_name:
+            print("Warning: No class selected")
             return
             
-        equipment_options = self.config.equipment['class_equipment'][character.class_name]
+        if character.class_name not in self.config.class_equipment:
+            print(f"Warning: No equipment options found for {character.class_name}")
+            return
+            
+        equipment_options = self.config.class_equipment[character.class_name]
+        if not equipment_options or 'option_sets' not in equipment_options:
+            print(f"Warning: Invalid equipment options for {character.class_name}")
+            return
+            
         print("\nChoose your starting equipment:")
-        
         self._process_equipment_options(character, equipment_options)
-        self._add_starting_money(character)
 
     def _process_equipment_options(self, character: Character, equipment_options: Dict) -> None:
         """Process all equipment options for a character"""
+        if 'option_sets' not in equipment_options:
+            print("Warning: No option sets found in equipment options")
+            return
+            
         for i, option_set in enumerate(equipment_options['option_sets'], 1):
             if 'fixed' in option_set:
                 self._handle_fixed_equipment(character, option_set['fixed'])
@@ -75,45 +87,45 @@ class EquipmentCreator(CreatorInterface):
                 print(f"Please enter a valid number between 1 and {len(choices)}")
 
     def _handle_equipment_choice(self, character: Character, item: str) -> None:
-        """Handle a single equipment choice, including category-based choices and packs"""
+        """Handle a single equipment choice, including category-based choices"""
         # Define special choices that need category handling
         special_choices = {
-            "martial_melee_weapon": ("martial_melee", "Choose a martial melee weapon:"),
-            "martial_ranged_weapon": ("martial_ranged", "Choose a martial ranged weapon:"),
-            "simple_melee_weapon": ("simple_melee", "Choose a simple melee weapon:"),
-            "simple_ranged_weapon": ("simple_ranged", "Choose a simple ranged weapon:"),
-            "two_martial_weapons": ("martial_combined", "Choose two martial weapons (can be the same):"),
+            "martial_melee_weapon": ("weapons.martial_melee", "Choose a martial melee weapon:"),
+            "martial_ranged_weapon": ("weapons.martial_ranged", "Choose a martial ranged weapon:"),
+            "simple_melee_weapon": ("weapons.simple_melee", "Choose a simple melee weapon:"),
+            "simple_ranged_weapon": ("weapons.simple_ranged", "Choose a simple ranged weapon:"),
+            "two_martial_weapons": ("weapons.martial_combined", "Choose two martial weapons (can be the same):"),
             "other_musical_instrument": ("instruments", "Choose a musical instrument:")
         }
         
-        # Check if this is a pack
-        if item.endswith('_pack'):
-            try:
-                character.add_pack(item)
-            except ValueError as e:
-                print(f"Warning: Could not add pack {item}: {e}")
-                print("Defaulting to Explorer's Pack...")
+        try:
+            # Check if this is a pack
+            if item.endswith('_pack'):
                 try:
-                    character.add_pack("explorers_pack")
-                except ValueError as e2:
-                    print(f"Error: Could not add default pack either: {e2}")
-            return
-        
-        # Special handling for category-based choices
-        if item in special_choices:
-            category, prompt = special_choices[item]
-            if category == "martial_combined":
-                self._choose_two_martial_weapons(character)
-            elif category == "instruments":
-                self._choose_musical_instrument(character)
+                    character.add_pack(item)
+                except ValueError as e:
+                    print(f"Warning: Could not add pack {item}: {e}")
+                    print("Defaulting to Explorer's Pack...")
+                    try:
+                        character.add_pack("explorers_pack")
+                    except ValueError as e2:
+                        print(f"Error: Could not add default pack either: {e2}")
+                return
+            
+            # Special handling for category-based choices
+            if item in special_choices:
+                category, prompt = special_choices[item]
+                if category == "weapons.martial_combined":
+                    self._choose_two_martial_weapons(character)
+                elif category.startswith("instruments"):
+                    self._choose_musical_instrument(character)
+                else:
+                    self._choose_from_weapon_category(character, category, prompt)
             else:
-                self._choose_from_weapon_category(character, category, prompt)
-        else:
-            # Direct item addition
-            try:
+                # Direct item addition
                 character.add_item(item)
-            except ValueError as e:
-                print(f"Warning: {e}")
+        except ValueError as e:
+            print(f"Warning: Failed to add item '{item}': {e}")
 
     def _get_instruments_from_category(self) -> List[str]:
         """Get list of available musical instruments"""
@@ -126,9 +138,22 @@ class EquipmentCreator(CreatorInterface):
     def _get_weapons_from_category(self, category: str) -> List[str]:
         """Get list of weapons from a specific category"""
         weapons = []
-        if category in self.config.equipment['weapons']:
-            for weapon_data in self.config.equipment['weapons'][category].values():
-                weapons.append(weapon_data['name'])
+        category_path = category.split('.')
+        
+        # Navigate through the nested structure
+        current_dict = self.config.equipment
+        for path_part in category_path:
+            if path_part in current_dict:
+                current_dict = current_dict[path_part]
+            else:
+                return []
+
+        # Collect weapons from the category
+        if isinstance(current_dict, dict):
+            for weapon_data in current_dict.values():
+                if isinstance(weapon_data, dict) and 'name' in weapon_data:
+                    weapons.append(weapon_data['name'])
+        
         return sorted(weapons)
 
     def _choose_from_weapon_category(self, character: Character, category: str, prompt: str) -> None:
@@ -194,18 +219,25 @@ class EquipmentCreator(CreatorInterface):
 
     def _choose_musical_instrument(self, character: Character) -> None:
         """Handle musical instrument selection"""
-        instruments = self._get_instruments_from_category()
+        instruments = []
+        if 'instruments' in self.config.equipment:
+            for instrument_data in self.config.equipment['instruments'].values():
+                if isinstance(instrument_data, dict) and 'name' in instrument_data:
+                    instruments.append(instrument_data['name'])
         
+        if not instruments:
+            print("No instruments available")
+            return
+            
         print("\nChoose a musical instrument:")
-        for i, instrument in enumerate(instruments, 1):
+        for i, instrument in enumerate(sorted(instruments), 1):
             print(f"{i}. {instrument}")
         
         while True:
             try:
-                musicChoice = int(input("Enter your choice (number): ")) - 1
-                if 0 <= musicChoice < len(instruments):
-                    print(instruments[musicChoice])
-                    character.add_item(instruments[musicChoice])
+                choice = int(self._get_input("Enter your choice (number): ")) - 1
+                if 0 <= choice < len(instruments):
+                    character.add_item(instruments[choice])
                     break
                 else:
                     print(f"Please enter a number between 1 and {len(instruments)}")

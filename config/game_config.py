@@ -12,6 +12,9 @@ class GameConfig:
     equipment: Dict[str, Any]
     races: Dict[str, Any]
     classes: Dict[str, Any]
+    class_equipment: Dict[str, Any]  # Add this field
+    equipment_types: Dict[str, str]  # Add this for equipment types
+    packs: Dict[str, Any]  # Add this for packs
 
 class ConfigurationManager:
     """Handles loading and accessing game configuration"""
@@ -34,11 +37,17 @@ class ConfigurationManager:
     
     @lru_cache()
     def _load_all_config(self) -> GameConfig:
+        """Load and combine all configuration data"""
+        equipment_data = self._load_yaml("equipment.yaml")
+        
         return GameConfig(
             character_base=self._load_yaml("character_base.yaml"),
-            equipment=self._load_yaml("equipment.yaml"),
+            equipment=equipment_data.get('equipment', {}),
             races=self._load_yaml("races.yaml"),
-            classes=self._load_yaml("classes.yaml")
+            classes=self._load_yaml("classes.yaml"),
+            class_equipment=equipment_data.get('class_equipment', {}),
+            equipment_types=equipment_data.get('equipment_types', {}),
+            packs=equipment_data.get('packs', {})
         )
     
     def get_config(self) -> GameConfig:
