@@ -17,28 +17,47 @@ class EquipmentCreator(CreatorInterface):
         self._add_starting_money(character)
 
     def _process_equipment_options(self, character: Character, equipment_options: Dict) -> None:
+        """Process all equipment options for a character"""
         for i, option_set in enumerate(equipment_options['option_sets'], 1):
             if 'fixed' in option_set:
                 self._handle_fixed_equipment(character, option_set['fixed'])
             elif 'choices' in option_set:
+                print(f"\nEquipment Choice Set {i}:")
                 self._handle_equipment_choices(character, option_set['choices'], i)
 
     def _handle_fixed_equipment(self, character: Character, items: List[str]) -> None:
+        """Handle adding fixed equipment items"""
         for item in items:
-            try:
-                character.add_item(item)
-                print(f"Added: {item}")
-            except ValueError as e:
-                print(f"Warning: Couldn't add {item} - {e}")
+            if item.endswith('_pack'):
+                try:
+                    character.add_pack(item)
+                except ValueError as e:
+                    print(f"Warning: Could not add pack {item}: {e}")
+            else:
+                try:
+                    character.add_item(item)
+                    print(f"Added: {item}")
+                except ValueError as e:
+                    print(f"Warning: Couldn't add {item} - {e}")
 
     def _handle_equipment_choices(self, character: Character, choices: List[Any], option_num: int) -> None:
-        print(f"\nOption Set {option_num}:")
+        """Handle presenting and processing equipment choices"""
+        # Display choices
         for i, choice in enumerate(choices, 1):
             if isinstance(choice, list):
                 print(f"{i}. {', '.join(choice)}")
             else:
-                print(f"{i}. {choice}")
+                # Handle pack display names
+                if choice.endswith('_pack'):
+                    pack_data = self.config.equipment['packs'].get(choice)
+                    if pack_data:
+                        print(f"{i}. {pack_data['name']}")
+                    else:
+                        print(f"{i}. {choice}")
+                else:
+                    print(f"{i}. {choice}")
         
+        # Get user choice
         while True:
             try:
                 choice_idx = int(input("Enter your choice (number): ")) - 1
@@ -53,10 +72,10 @@ class EquipmentCreator(CreatorInterface):
                 else:
                     print("Invalid choice. Please try again.")
             except ValueError as e:
-                print(f"Error: {e}")
+                print(f"Please enter a valid number between 1 and {len(choices)}")
 
     def _handle_equipment_choice(self, character: Character, item: str) -> None:
-        """Handle a single equipment choice, including category-based choices"""
+        """Handle a single equipment choice, including category-based choices and packs"""
         # Define special choices that need category handling
         special_choices = {
             "martial_melee_weapon": ("martial_melee", "Choose a martial melee weapon:"),
@@ -66,6 +85,19 @@ class EquipmentCreator(CreatorInterface):
             "two_martial_weapons": ("martial_combined", "Choose two martial weapons (can be the same):"),
             "other_musical_instrument": ("instruments", "Choose a musical instrument:")
         }
+        
+        # Check if this is a pack
+        if item.endswith('_pack'):
+            try:
+                character.add_pack(item)
+            except ValueError as e:
+                print(f"Warning: Could not add pack {item}: {e}")
+                print("Defaulting to Explorer's Pack...")
+                try:
+                    character.add_pack("explorers_pack")
+                except ValueError as e2:
+                    print(f"Error: Could not add default pack either: {e2}")
+            return
         
         # Special handling for category-based choices
         if item in special_choices:
@@ -84,9 +116,10 @@ class EquipmentCreator(CreatorInterface):
                 print(f"Warning: {e}")
 
     def _get_instruments_from_category(self) -> List[str]:
+        """Get list of available musical instruments"""
         instruments = []
-        #if category in self.config.equipment['instruments']:
-        for instrument_data in self.config.equipment['instruments'].values():
+        musical_instruments = self.config.equipment['adventuring_gear_subclasses'].get('musical_instruments', {})
+        for instrument_data in musical_instruments.values():
             instruments.append(instrument_data['name'])
         return sorted(instruments)
 
@@ -161,9 +194,7 @@ class EquipmentCreator(CreatorInterface):
 
     def _choose_musical_instrument(self, character: Character) -> None:
         """Handle musical instrument selection"""
-        #instruments = ["Bagpipes", "Drum", "Dulcimer", "Flute", "Lute", "Lyre", "Horn", "Pan Flute", "Shawm", "Viol"]
         instruments = self._get_instruments_from_category()
-        #print(instruments)
         
         print("\nChoose a musical instrument:")
         for i, instrument in enumerate(instruments, 1):

@@ -195,16 +195,14 @@ class Character:
         return name.lower().replace(' ', '_')
 
     def _find_item_in_config(self, name: str) -> Optional[Dict]:
-        """Search for an item in all equipment categories with improved name matching"""
-        equipment = self.config.equipment
+        """Enhanced item search to include adventuring gear"""
         normalized_name = self._normalize_item_name(name)
+        equipment = self.config.equipment
         
         # Search armor
         for category in equipment['armor'].values():
-            # Try direct lookup first
             if normalized_name in category:
                 return category[normalized_name]
-            # Try matching by normalized display name
             for item_key, item_data in category.items():
                 if self._normalize_item_name(item_data['name']) == normalized_name:
                     return item_data
@@ -217,19 +215,32 @@ class Character:
                 if self._normalize_item_name(item_data['name']) == normalized_name:
                     return item_data
         
-        # Search packs
-        if normalized_name in equipment['packs']:
-            return equipment['packs'][normalized_name]
-        for pack_key, pack_data in equipment['packs'].items():
-            if self._normalize_item_name(pack_data['name']) == normalized_name:
-                return pack_data
+        # Search adventuring gear
+        if 'adventuring_gear' in equipment:
+            for category in equipment['adventuring_gear'].values():
+                if normalized_name in category:
+                    return category[normalized_name]
+                for item_key, item_data in category.items():
+                    if self._normalize_item_name(item_data['name']) == normalized_name:
+                        return item_data
         
-        # Search Musical Instruments
-        if normalized_name in equipment['instruments']:
-            return equipment['instruments'][normalized_name]
-        for instrument_key, instrument_data in equipment['instruments'].items():
-            if self._normalize_item_name(instrument_data['name']) == normalized_name:
-                return instrument_data
+        # Search adventuring gear subclasses
+        if 'adventuring_gear_subclasses' in equipment:
+            for subclass in equipment['adventuring_gear_subclasses'].values():
+                if normalized_name in subclass:
+                    return subclass[normalized_name]
+                for item_key, item_data in subclass.items():
+                    if self._normalize_item_name(item_data['name']) == normalized_name:
+                        return item_data
+        
+        # Search packs
+        if 'packs' in equipment:
+            if normalized_name in equipment['packs']:
+                return equipment['packs'][normalized_name]
+        
+        # Search musical instruments
+        if normalized_name in equipment['adventuring_gear_subclasses']['musical_instruments']:
+            return equipment['adventuring_gear_subclasses']['musical_instruments'][normalized_name]
         
         return None
     
@@ -388,6 +399,78 @@ class Character:
                 # Feature application logic here
                 # This will be expanded based on feature types
                 pass
+
+    def add_pack(self, pack_name: str) -> None:
+        """Add a pack and all its contents to the character's inventory"""
+        if 'packs' not in self.config.equipment or pack_name not in self.config.equipment['packs']:
+            raise ValueError(f"Pack not found: {pack_name}")
+        
+        pack_data = self.config.equipment['packs'][pack_name]
+        print(f"\nAdding {pack_data['name']} contents:")
+        
+        total_weight = 0
+        total_value = 0
+        
+        for content in pack_data['contents']:
+            ref = content['reference']
+            quantity = content['quantity']
+            
+            # Find the referenced item in adventuring_gear
+            item_data = self._find_referenced_item(ref)
+            if not item_data:
+                print(f"Warning: Item not found: {ref}")
+                continue
+            
+            try:
+                # Add the item to inventory
+                self.add_item(item_data['name'], quantity)
+                
+                # Calculate weight and value
+                item_weight = float(item_data.get('weight', 0)) * quantity
+                item_value = self._parse_currency(item_data.get('cost', '0 gp')) * quantity
+                
+                total_weight += item_weight
+                total_value += item_value
+                
+                print(f"Added: {quantity}x {item_data['name']}")
+                
+            except ValueError as e:
+                print(f"Warning: {e}")
+        
+        # Verify pack total matches expected
+        expected_cost = self._parse_currency(pack_data['cost'])
+        print(f"\nPack Summary:")
+        print(f"Total Weight: {total_weight:.1f} lbs")
+        print(f"Total Value: {total_value:.2f} gp")
+        if abs(total_value - expected_cost) > 0.01:
+            print(f"Note: Pack cost ({expected_cost} gp) differs from sum of items ({total_value:.2f} gp)")
+
+    def _find_referenced_item(self, reference: str) -> Optional[Dict]:
+        """Find an item in adventuring_gear by its reference key"""
+        equipment = self.config.equipment['adventuring_gear']
+        
+        # Search through all categories in adventuring_gear
+        for category in equipment.values():
+            # Search items in this category
+            if reference in category:
+                return category[reference]
+            
+            # Try matching by normalized name
+            for item_key, item_data in category.items():
+                if self._normalize_item_name(item_data['name']) == self._normalize_item_name(reference):
+                    return item_data
+        
+        # Also search adventuring_gear_subclasses
+        if 'adventuring_gear_subclasses' in self.config.equipment:
+            for subclass in self.config.equipment['adventuring_gear_subclasses'].values():
+                if reference in subclass:
+                    return subclass[reference]
+                # Try matching by normalized name
+                for item_key, item_data in subclass.items():
+                    if self._normalize_item_name(item_data['name']) == self._normalize_item_name(reference):
+                        return item_data
+        
+        return None
 
     def __str__(self) -> str:
         return self.display_info()
