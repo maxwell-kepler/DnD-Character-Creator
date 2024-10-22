@@ -15,18 +15,11 @@ class CharacterCreator:
         
         character = Character(name=name, player_name=player_name)
         
-        # Generate ability scores
+        # Generate ability scores first
         self._handle_ability_scores(character)
         
-        # Choose and set race
-        race_choices = list(self.config.races.keys())
-        print("\nChoose your race:")
-        for i, race in enumerate(race_choices, 1):
-            print(f"{i}. {race}")
-        
-        choice = int(input("Enter your choice (number): "))
-        race_choice = race_choices[choice - 1]
-        character.set_race(race_choice)
+        # Choose race and subrace
+        self._choose_race_and_subrace(character)
         
         # Choose and set class
         class_choices = list(self.config.classes.keys())
@@ -46,6 +39,49 @@ class CharacterCreator:
             self._choose_subclass(character)
         
         return character
+
+    def _choose_race_and_subrace(self, character: Character) -> None:
+        """Handle race and subrace selection"""
+        # Display available races
+        race_choices = list(self.config.races.keys())
+        print("\nChoose your race:")
+        for i, race in enumerate(race_choices, 1):
+            print(f"{i}. {race}")
+        
+        choice = int(input("Enter your choice (number): "))
+        race_choice = race_choices[choice - 1]
+        race_data = self.config.races[race_choice]
+        
+        # Check if the race has subraces
+        subrace_choice = None
+        if 'subraces' in race_data and race_data['subraces']:
+            print(f"\nChoose your {race_choice} subrace:")
+            subrace_choices = list(race_data['subraces'].keys())
+            
+            for i, subrace in enumerate(subrace_choices, 1):
+                subrace_name = race_data['subraces'][subrace]['name']
+                print(f"{i}. {subrace_name}")
+            
+            choice = int(input("Enter your choice (number): "))
+            subrace_choice = subrace_choices[choice - 1]
+            
+            # Display subrace description
+            print(f"\nSelected: {race_data['subraces'][subrace_choice]['name']}")
+            if 'traits' in race_data['subraces'][subrace_choice]:
+                print("Subracial Traits:")
+                for trait in race_data['subraces'][subrace_choice]['traits']:
+                    print(f"• {trait['name']}: {trait['description']}")
+        
+        # Set race and subrace
+        character.set_race(race_choice, subrace_choice)
+        
+        # Display selected race/subrace information
+        print(f"\nSelected Race: {character.race['name']}")
+        if hasattr(character, 'subrace'):
+            print(f"Subrace: {character.subrace['name']}")
+        print("\nRacial Traits:")
+        for trait in character.race['traits']:
+            print(f"• {trait['name']}: {trait['description']}")
 
     def _handle_ability_scores(self, character: Character) -> None:
         """Handle ability score generation and assignment"""

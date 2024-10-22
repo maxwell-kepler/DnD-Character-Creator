@@ -1,6 +1,6 @@
 # character/base.py
 from config.game_config import ConfigurationManager
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 class AbilityScores:
     def __init__(self):
@@ -70,24 +70,47 @@ class Character:
         for skill in self.skills:
             self.skills[skill] = self.calculate_skill_modifier(skill)
 
-    def set_race(self, race_name: str) -> None:
+    def set_race(self, race_name: str, subrace_name: Optional[str] = None) -> None:
         """Set character race and apply racial traits"""
         if race_name not in self.config.races:
             raise ValueError(f"Invalid race: {race_name}")
         
-        self.race = self.config.races[race_name]
+        race_data = self.config.races[race_name]
+        self.race = race_data
         
-        # Apply racial ability score increases
+        # Apply base racial ability score increases
         for ability, increase in self.race['ability_score_increase'].items():
             current = getattr(self.ability_scores, ability.lower())
             setattr(self.ability_scores, ability.lower(), current + increase)
         
-        # Apply racial traits
+        # Apply base racial traits
         self.speed = self.race['speed']
         self.size = self.race['size']
         self.languages.extend(self.race['languages'])
         
-        # Update skills after applying racial bonuses
+        # Apply subrace if provided
+        if subrace_name:
+            if 'subraces' not in race_data or subrace_name not in race_data['subraces']:
+                raise ValueError(f"Invalid subrace: {subrace_name}")
+            
+            subrace_data = race_data['subraces'][subrace_name]
+            self.subrace = subrace_data
+            
+            # Apply subrace ability score increases
+            if 'ability_score_increase' in subrace_data:
+                for ability, increase in subrace_data['ability_score_increase'].items():
+                    current = getattr(self.ability_scores, ability.lower())
+                    setattr(self.ability_scores, ability.lower(), current + increase)
+            
+            # Apply subrace speed increase if any
+            if 'speed_increase' in subrace_data:
+                self.speed += subrace_data['speed_increase']
+            
+            # Add subrace traits
+            if 'traits' in subrace_data:
+                self.race['traits'].extend(subrace_data['traits'])
+        
+        # Update skills after applying all racial bonuses
         self.update_all_skills()
     
     def set_class(self, class_name: str) -> None:
