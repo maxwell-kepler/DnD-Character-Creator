@@ -1,7 +1,8 @@
 # main.py
 from character.base import Character
 from config.game_config import ConfigurationManager
-from typing import Optional, List
+from typing import List
+
 
 class CharacterCreator:
     def __init__(self):
@@ -14,73 +15,163 @@ class CharacterCreator:
         
         character = Character(name=name, player_name=player_name)
         
-        # Load race options from config
-        race_choice = self._choose_from_list(
-            "Choose your race:",
-            list(self.config.races.keys())
-        )
-        self._apply_race(character, race_choice)
+        # Generate ability scores
+        self._handle_ability_scores(character)
         
-        # Load class options from config
-        class_choice = self._choose_from_list(
-            "Choose your class:",
-            list(self.config.classes.keys())
-        )
-        self._apply_class(character, class_choice)
+        # Choose and set race
+        race_choices = list(self.config.races.keys())
+        print("\nChoose your race:")
+        for i, race in enumerate(race_choices, 1):
+            print(f"{i}. {race}")
+        
+        choice = int(input("Enter your choice (number): "))
+        race_choice = race_choices[choice - 1]
+        character.set_race(race_choice)
+        
+        # Choose and set class
+        class_choices = list(self.config.classes.keys())
+        print("\nChoose your class:")
+        for i, class_name in enumerate(class_choices, 1):
+            print(f"{i}. {class_name}")
+        
+        choice = int(input("Enter your choice (number): "))
+        class_choice = class_choices[choice - 1]
+        character.set_class(class_choice)
+        
+        # Choose skills based on class options
+        self._choose_skills(character)
+        
+        # Choose subclass if level is 3 or higher
+        if character.level >= 3:
+            self._choose_subclass(character)
         
         return character
+
+    def _handle_ability_scores(self, character: Character) -> None:
+        """Handle ability score generation and assignment"""
+        print("\nAbility Score Generation")
+        print("Choose your method:")
+        print("1. Standard Array (15, 14, 13, 12, 10, 8)")
+        print("2. Roll 4d6, drop lowest")
+        print("3. Point Buy")
+        
+        choice = int(input("Enter your choice (1-3): "))
+        
+        if choice == 1:
+            scores = self._standard_array()
+        elif choice == 2:
+            scores = self._roll_abilities()
+        else:
+            scores = self._point_buy()
+            
+        self._assign_ability_scores(character, scores)
     
-    def _get_input(self, prompt: str) -> str:
-        return input(prompt).strip()
+    def _standard_array(self) -> List[int]:
+        """Return the standard array of ability scores"""
+        return [15, 14, 13, 12, 10, 8]
     
-    def _choose_from_list(self, prompt: str, options: List[str]) -> str:
-        print(f"\n{prompt}")
-        for i, option in enumerate(options, 1):
-            print(f"{i}. {option}")
-        
-        while True:
-            try:
-                choice = int(input("\nEnter your choice (number): "))
-                if 1 <= choice <= len(options):
-                    return options[choice - 1]
-            except ValueError:
-                pass
-            print(f"Please enter a number between 1 and {len(options)}")
+    def _roll_abilities(self) -> List[int]:
+        """Roll 4d6, drop lowest for each ability score"""
+        scores = []
+        for _ in range(6):
+            rolls = sorted([random.randint(1, 6) for _ in range(4)])
+            scores.append(sum(rolls[1:]))  # Drop lowest roll
+        scores.sort(reverse=True)
+        return scores
     
-    def _apply_race(self, character: Character, race: str) -> None:
-        """Apply racial traits and bonuses from configuration"""
-        race_config = self.config.races[race]
+    def _point_buy(self) -> List[int]:
+        """Handle point buy ability score generation"""
+        print("\nPoint Buy System")
+        print("You have 27 points to spend")
+        print("Costs: 8(-0) 9(-1) 10(-2) 11(-3) 12(-4) 13(-5) 14(-7) 15(-9)")
         
-        # Apply ability score increases
-        for ability, increase in race_config['ability_score_increase'].items():
-            current_score = getattr(character.ability_scores, ability.lower())
-            setattr(character.ability_scores, ability.lower(), current_score + increase)
+        points = 27
+        scores = []
+        abilities = ['Strength', 'Dexterity', 'Constitution', 'Intelligence', 'Wisdom', 'Charisma']
+        costs = {8:0, 9:1, 10:2, 11:3, 12:4, 13:5, 14:7, 15:9}
         
-        # Apply other racial traits
-        character.speed = race_config['speed']
-        character.size = race_config['size']
-        # Add other racial features as needed
+        for ability in abilities:
+            while True:
+                try:
+                    score = int(input(f"\nChoose score for {ability} (8-15, {points} points remaining): "))
+                    if score not in costs:
+                        print("Invalid score. Choose between 8 and 15.")
+                        continue
+                    
+                    cost = costs[score]
+                    if cost > points:
+                        print("Not enough points remaining.")
+                        continue
+                    
+                    points -= cost
+                    scores.append(score)
+                    break
+                except ValueError:
+                    print("Please enter a valid number.")
+        
+        return scores
     
-    def _apply_class(self, character: Character, class_name: str) -> None:
-        """Apply class features and proficiencies from configuration"""
-        class_config = self.config.classes[class_name]
+    def _assign_ability_scores(self, character: Character, scores: List[int]) -> None:
+        """Assign generated scores to abilities"""
+        abilities = ['Strength', 'Dexterity', 'Constitution', 'Intelligence', 'Wisdom', 'Charisma']
         
-        # Apply saving throw proficiencies
-        character.saving_throw_proficiencies.extend(class_config['saving_throws'])
+        print("\nAssign your scores:", scores)
+        assignments = {}
         
-        # Handle skill choices
-        available_skills = class_config['skill_choices']['options']
-        num_choices = class_config['skill_choices']['count']
+        for score in scores:
+            print("\nAvailable abilities:", [a for a in abilities if a not in assignments])
+            while True:
+                ability = input(f"Assign {score} to which ability? ").title()
+                if ability not in abilities or ability in assignments:
+                    print("Invalid ability choice. Try again.")
+                    continue
+                assignments[ability] = score
+                break
+        
+        character.set_ability_scores(assignments)
+    
+    def _choose_subclass(self, character: Character) -> None:
+        """Handle subclass selection"""
+        if not character.class_data or 'subclasses' not in character.class_data['features']['level_3']:
+            return
+            
+        subclasses = character.class_data['features']['level_3']['subclasses']
+        print("\nChoose your subclass:")
+        subclass_names = list(subclasses.keys())
+        
+        for i, subclass in enumerate(subclass_names, 1):
+            print(f"{i}. {subclasses[subclass]['name']}")
+            
+        choice = int(input("Enter your choice (number): "))
+        subclass_choice = subclass_names[choice - 1]
+        character.set_subclass(subclass_choice)
+    
+    def _choose_skills(self, character: Character) -> None:
+        """Handle skill selection for the character"""
+        if not character.class_data:
+            return
+            
+        skill_choices = character.class_data['skill_choices']
+        num_choices = skill_choices['count']
+        available_skills = skill_choices['options'].copy()
         
         print(f"\nChoose {num_choices} skills:")
         for _ in range(num_choices):
-            skill = self._choose_from_list(
-                "Choose a skill:",
-                [skill for skill in available_skills if skill not in character.skill_proficiencies]
-            )
-            character.skill_proficiencies.append(skill)
+            # Display available skills
+            print("\nChoose a skill:")
+            for i, skill in enumerate(available_skills, 1):
+                print(f"{i}. {skill}")
+            
+            # Get choice
+            choice = int(input("Enter your choice (number): "))
+            chosen_skill = available_skills.pop(choice - 1)
+            character.skill_proficiencies.append(chosen_skill)
         
-        character.update_skills()
+        # Update skill modifiers after all selections
+        character.update_all_skills()
+    
+    def _get_input(self, prompt: str) -> str:
+        return input(prompt).strip()
 
 def main():
     creator = CharacterCreator()
